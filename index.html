@@ -24,9 +24,13 @@
 
         .neon-text {
             text-shadow: 
-                0 0 10px var(--neon-cyan),
-                0 0 20px var(--neon-cyan),
-                0 0 40px var(--neon-cyan);
+                0 0 8px var(--neon-cyan),
+                0 0 16px var(--neon-cyan);
+        }
+        
+        @keyframes grid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
         }
 
         .neon-emerald {
@@ -127,107 +131,119 @@
 </head>
 <body class="tail-container bg-zinc-950 text-zinc-200 overflow-x-hidden">
     <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-cyan-500/20">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-zinc-950 border-b border-cyan-500/30">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-bold text-xl shadow-[0_0_15px_#00f5ff]">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 flex items-center justify-center text-black font-bold text-2xl shadow-[0_0_20px_#00f5ff]">
                     <i class="fa-solid fa-microchip"></i>
                 </div>
                 <div>
-                    <span class="logo-font text-2xl font-semibold tracking-tighter neon-text">EZHILKIRTHIK</span>
+                    <span class="logo-font text-2xl font-semibold tracking-tighter text-white">EZHIL</span>
                 </div>
             </div>
             
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#about" class="nav-link active text-zinc-300 hover:text-white">ABOUT</a>
-                <a href="#experience" class="nav-link text-zinc-300 hover:text-white">EXPERIENCE</a>
-                <a href="#projects" class="nav-link text-zinc-300 hover:text-white">PROJECTS</a>
-                <a href="#skills" class="nav-link text-zinc-300 hover:text-white">SKILLS</a>
-                <a href="#publication" class="nav-link text-zinc-300 hover:text-white">PUBLICATION</a>
-                <a href="#achievements" class="nav-link text-zinc-300 hover:text-white">ACHIEVEMENTS</a>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-9 text-sm font-medium">
+                <a href="#about" class="nav-link text-zinc-300 hover:text-white transition-colors">ABOUT</a>
+                <a href="#experience" class="nav-link text-zinc-300 hover:text-white transition-colors">EXPERIENCE</a>
+                <a href="#projects" class="nav-link text-zinc-300 hover:text-white transition-colors">PROJECTS</a>
+                <a href="#skills" class="nav-link text-zinc-300 hover:text-white transition-colors">SKILLS</a>
+                <a href="#publication" class="nav-link text-zinc-300 hover:text-white transition-colors">PUBLICATION</a>
             </div>
-
-            <div class="flex items-center gap-4">
-                <a href="https://github.com/Ezhilkirthik" target="_blank"
-                   class="px-5 py-2.5 text-sm font-medium border border-cyan-400/30 hover:border-cyan-400 rounded-2xl flex items-center gap-2 transition-all hover:bg-cyan-950">
-                    <i class="fa-brands fa-github"></i>
-                    <span>GITHUB</span>
-                </a>
-                <button onclick="downloadResume()" 
-                        class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-black font-semibold rounded-2xl flex items-center gap-2 transition-all shadow-[0_0_20px_#00f5ff]">
-                    <i class="fa-solid fa-download"></i>
-                    <span>RESUME</span>
-                </button>
-            </div>
+            
+            <a href="https://github.com/Ezhilkirthik" target="_blank"
+               class="px-6 py-2.5 text-sm font-medium border border-cyan-400/40 hover:border-cyan-400 rounded-3xl flex items-center gap-2 transition-all">
+                <i class="fa-brands fa-github"></i>
+                <span>GITHUB</span>
+            </a>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <header class="min-h-screen flex items-center relative circuit-bg">
-        <div class="scanline"></div>
-        <div class="max-w-7xl mx-auto px-6 pt-20">
-            <div class="max-w-3xl">
-                <div class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-cyan-400/30 rounded-3xl mb-6">
-                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
-                    <span class="text-xs font-mono tracking-[2px] text-emerald-400">AVAILABLE FOR OPPORTUNITIES</span>
-                </div>
-                
-                <h1 class="text-7xl md:text-8xl font-semibold logo-font tracking-tighter leading-none neon-text mb-4">
-                    EZHILKIRTHIK M
-                </h1>
-                
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="h-px w-16 bg-gradient-to-r from-cyan-400 to-transparent"></div>
-                    <p class="text-2xl text-zinc-400 font-light">Electronics &amp; Communication Engineer</p>
-                </div>
-                
-                <p class="text-xl text-zinc-400 max-w-lg leading-relaxed mb-10">
-                    Passionate about power electronics, embedded systems, FPGA design, and sustainable automotive technologies. 
-                    Building the future of intelligent hardware.
-                </p>
-                
-                <div class="flex items-center gap-4">
-                    <a href="#projects" 
-                       class="px-8 py-4 bg-white text-zinc-950 font-semibold rounded-3xl flex items-center gap-3 hover:scale-105 transition-all group">
-                        EXPLORE PROJECTS
-                        <i class="fa-solid fa-arrow-right group-active:rotate-45 transition-transform"></i>
-                    </a>
+        <!-- HERO -->
+        <header class="min-h-screen flex items-center relative bg-zinc-950 overflow-hidden">
+            <!-- Subtle circuit grid background -->
+            <div class="absolute inset-0 bg-[linear-gradient(rgba(0,245,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,245,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+            
+            <div class="max-w-7xl mx-auto px-6 pt-20 relative z-10">
+                <div class="grid md:grid-cols-12 gap-12 items-center">
+                    <!-- Left Content -->
+                    <div class="md:col-span-7">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/80 border border-cyan-400/30 rounded-3xl mb-6 backdrop-blur-sm">
+                            <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs font-mono tracking-[2px] text-emerald-400">AVAILABLE FOR OPPORTUNITIES</span>
+                        </div>
+                        
+                        <h1 class="text-6xl md:text-7xl font-semibold logo-font tracking-tighter leading-[1.05] text-white mb-2">
+                            EZHILKIRTHIK M
+                        </h1>
+                        
+                        <div class="h-2 w-24 bg-gradient-to-r from-cyan-400 to-emerald-400 mb-6"></div>
+                        
+                        <p class="text-2xl md:text-3xl font-light text-zinc-300 mb-8">
+                            Electronics &amp; Communication Engineer
+                        </p>
+                        
+                        <p class="text-xl text-zinc-400 max-w-lg leading-relaxed mb-10">
+                            Motivated ECE undergraduate specializing in power electronics, FPGA design, and automotive embedded systems.
+                        </p>
+                        
+                        <div class="flex items-center gap-4">
+                            <a href="#projects" 
+                               class="px-8 py-4 bg-gradient-to-r from-cyan-400 to-emerald-400 text-zinc-950 font-semibold rounded-3xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_-4px] shadow-cyan-400">
+                                EXPLORE MY WORK
+                                <i class="fa-solid fa-arrow-right transition-transform group-hover:rotate-45"></i>
+                            </a>
+                            
+                            <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank"
+                               class="px-8 py-4 border border-zinc-400 hover:border-white font-medium rounded-3xl flex items-center gap-2 transition-all">
+                                <i class="fa-brands fa-linkedin"></i>
+                                <span>LINKEDIN</span>
+                            </a>
+                        </div>
+                        
+                        <div class="mt-16 flex items-center gap-8 text-sm">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-location-dot text-cyan-400"></i>
+                                <span>Coimbatore, India</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-envelope text-cyan-400"></i>
+                                <span>ezhilkirthikm@gmail.com</span>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank"
-                       class="px-8 py-4 border border-zinc-400 hover:border-white font-medium rounded-3xl flex items-center gap-2 transition-all">
-                        <i class="fa-brands fa-linkedin"></i>
-                        <span>LINKEDIN</span>
-                    </a>
-                </div>
-                
-                <div class="mt-16 flex items-center gap-8 text-sm">
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-location-dot text-cyan-400"></i>
-                        <span>Coimbatore, India</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-envelope text-cyan-400"></i>
-                        <span>ezhilkirthikm@gmail.com</span>
+                    <!-- Profile Image -->
+                    <div class="md:col-span-5 flex justify-center md:justify-end">
+                        <div class="relative">
+                            <div class="w-80 h-80 rounded-3xl overflow-hidden border-4 border-cyan-400/30 shadow-2xl shadow-cyan-500/30">
+                                <img src="https://picsum.photos/id/1015/600/600" 
+                                     alt="Ezhilkirthik M" 
+                                     class="w-full h-full object-cover grayscale-[0.3] hover:grayscale-0 transition-all duration-700">
+                            </div>
+                            <!-- Decorative ring -->
+                            <div class="absolute -inset-6 border border-cyan-400/30 rounded-[2.5rem] -rotate-12"></div>
+                            <div class="absolute -inset-12 border border-emerald-400/20 rounded-[3rem] rotate-12"></div>
+                            
+                            <!-- Floating badges -->
+                            <div class="absolute -top-6 -right-6 bg-zinc-900 border border-emerald-400 text-emerald-400 text-xs px-5 py-2.5 rounded-2xl flex items-center gap-2 shadow-xl">
+                                <i class="fa-solid fa-microchip"></i>
+                                <span>FPGA</span>
+                            </div>
+                            <div class="absolute -bottom-4 -left-8 bg-zinc-900 border border-cyan-400 text-cyan-400 text-xs px-5 py-2.5 rounded-2xl flex items-center gap-2 shadow-xl">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span>POWER</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Floating tech icons -->
-        <div class="absolute bottom-12 right-12 hidden xl:block">
-            <div class="grid grid-cols-2 gap-6 opacity-30">
-                <div class="text-5xl text-cyan-400"><i class="fa-solid fa-microchip"></i></div>
-                <div class="text-5xl text-emerald-400"><i class="fa-solid fa-bolt"></i></div>
-                <div class="text-5xl text-violet-400"><i class="fa-solid fa-waveform"></i></div>
-                <div class="text-5xl text-amber-400"><i class="fa-solid fa-plug"></i></div>
+            
+            <div class="absolute bottom-12 left-1/2 flex flex-col items-center z-10">
+                <div class="text-[10px] tracking-[3px] font-mono text-zinc-500 mb-3">SCROLL FOR MORE</div>
+                <div class="w-px h-16 bg-gradient-to-b from-transparent via-cyan-400 to-transparent"></div>
             </div>
-        </div>
-        
-        <div class="absolute bottom-10 left-1/2 flex flex-col items-center">
-            <div class="text-[10px] tracking-[3px] font-mono text-zinc-500 mb-2">SCROLL TO EXPLORE</div>
-            <div class="w-px h-12 bg-gradient-to-b from-transparent via-cyan-400 to-transparent"></div>
-        </div>
-    </header>
+        </header>
 
     <!-- ABOUT -->
     <section id="about" class="py-24 border-t border-zinc-800">
@@ -236,41 +252,45 @@
                 <div class="md:col-span-5">
                     <div class="sticky top-28">
                         <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">01 — PROFILE</span>
-                        <h2 class="section-header text-5xl font-semibold mt-6 leading-none">Professional<br>Summary</h2>
+                        <h2 class="section-header text-5xl font-semibold mt-6 leading-none">About Me</h2>
                     </div>
                 </div>
                 <div class="md:col-span-7">
-                    <div class="prose prose-invert max-w-none text-lg leading-relaxed text-zinc-300">
-                        <p class="mb-6">
-                            Motivated Electrical and Electronics-focused undergraduate with hands-on lab experience in automotive 
-                            low-voltage power management systems. Adept at operating lab instruments (multimeters, oscilloscopes, 
-                            electronic loads) to support the testing and validation of DC-DC converters and battery monitoring subsystems.
+                    <div class="max-w-2xl">
+                        <p class="text-zinc-400 text-lg mb-10">
+                            Motivated Electrical and Electronics undergraduate with hands-on experience in automotive low-voltage systems and hardware validation.
                         </p>
-                        <p>
-                            Strong foundation in circuit schematics, wiring practices, and building prototype assemblies. 
-                            Detail-oriented and systematic, eager to contribute to sustainable transport solutions and learn in a 
-                            fast-paced, collaborative automotive engineering environment.
-                        </p>
-                    </div>
-                    
-                    <div class="mt-12 grid grid-cols-3 gap-6">
-                        <div class="bg-zinc-900/50 border border-zinc-700 p-6 rounded-3xl">
-                            <div class="text-emerald-400 text-4xl mb-3"><i class="fa-solid fa-graduation-cap"></i></div>
-                            <div class="text-sm text-zinc-400">EDUCATION</div>
-                            <div class="font-medium">B.Tech ECE</div>
-                            <div class="text-xs text-zinc-500">Amrita Vishwa Vidyapeetham • 2027</div>
-                        </div>
-                        <div class="bg-zinc-900/50 border border-zinc-700 p-6 rounded-3xl">
-                            <div class="text-cyan-400 text-4xl mb-3"><i class="fa-solid fa-flask"></i></div>
-                            <div class="text-sm text-zinc-400">EXPERTISE</div>
-                            <div class="font-medium">Power Electronics</div>
-                            <div class="text-xs text-zinc-500">FPGA • Embedded Systems</div>
-                        </div>
-                        <div class="bg-zinc-900/50 border border-zinc-700 p-6 rounded-3xl">
-                            <div class="text-violet-400 text-4xl mb-3"><i class="fa-solid fa-trophy"></i></div>
-                            <div class="text-sm text-zinc-400">ACHIEVEMENT</div>
-                            <div class="font-medium">IEEE Publication</div>
-                            <div class="text-xs text-zinc-500">FFT Architecture</div>
+                        
+                        <div class="space-y-8">
+                            <div class="flex gap-6">
+                                <div class="w-10 h-10 flex-shrink-0 bg-cyan-950 rounded-2xl flex items-center justify-center text-cyan-400">
+                                    <i class="fa-solid fa-flask"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-white mb-1">Lab &amp; Hardware Expertise</div>
+                                    <div class="text-zinc-400">Experienced with multimeters, oscilloscopes, electronic loads, and prototype PCB assembly for DC-DC converters and battery systems.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-6">
+                                <div class="w-10 h-10 flex-shrink-0 bg-emerald-950 rounded-2xl flex items-center justify-center text-emerald-400">
+                                    <i class="fa-solid fa-microchip"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-white mb-1">Digital Design</div>
+                                    <div class="text-zinc-400">Strong foundation in FPGA, RTL design using Verilog, and embedded systems development with STM32 and Raspberry Pi.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-6">
+                                <div class="w-10 h-10 flex-shrink-0 bg-violet-950 rounded-2xl flex items-center justify-center text-violet-400">
+                                    <i class="fa-solid fa-car"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-white mb-1">Automotive Focus</div>
+                                    <div class="text-zinc-400">Passionate about sustainable transport, power electronics, control systems, and ISO 26262 compliant design practices.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -283,36 +303,52 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex items-end justify-between mb-12">
                 <div>
-                    <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">02 — WORK</span>
-                    <h2 class="section-header text-5xl font-semibold mt-6">Experience</h2>
+                    <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">02 — EXPERIENCE</span>
+                    <h2 class="section-header text-5xl font-semibold mt-6">Professional Experience</h2>
                 </div>
             </div>
             
-            <div class="max-w-4xl">
-                <div class="glass border border-zinc-700 rounded-3xl p-10">
-                    <div class="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-                        <div>
-                            <div class="font-semibold text-xl">Maven Silicon, Bengaluru</div>
-                            <div class="text-emerald-400">RTL Design Intern • Aug 2024 – Sept 2024</div>
-                        </div>
-                        <div class="flex-1 h-px bg-zinc-700 hidden md:block"></div>
-                        <div class="text-xs font-mono text-zinc-400">2 MONTHS</div>
-                    </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="relative pl-8 border-l-2 border-cyan-400/30">
+                    <div class="absolute -left-[9px] top-2 w-4 h-4 rounded-full border-4 border-cyan-400 bg-zinc-950"></div>
                     
-                    <ul class="space-y-6 text-zinc-300">
-                        <li class="flex gap-4">
-                            <span class="text-cyan-400 mt-1">◉</span>
-                            <span>Developed RTL for AMBA AHB-APB Bridge and contributed to technical clarification reports for protocol compliance.</span>
-                        </li>
-                        <li class="flex gap-4">
-                            <span class="text-cyan-400 mt-1">◉</span>
-                            <span>Implemented FSM-based protocol control logic using Verilog.</span>
-                        </li>
-                        <li class="flex gap-4">
-                            <span class="text-cyan-400 mt-1">◉</span>
-                            <span>Developed self-checking testbenches and performed waveform-level debugging.</span>
-                        </li>
-                    </ul>
+                    <div class="glass border border-zinc-700 rounded-3xl p-8 mb-8">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="flex items-center gap-3">
+                                    <div class="text-4xl">💼</div>
+                                    <div>
+                                        <div class="font-semibold text-2xl">Maven Silicon</div>
+                                        <div class="text-emerald-400">RTL Design Intern</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs font-mono bg-zinc-800 px-4 py-2 rounded-2xl">AUG 2024 — SEP 2024</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 space-y-5 text-zinc-300">
+                            <div class="flex gap-4">
+                                <i class="fa-solid fa-check text-emerald-400 mt-1.5"></i>
+                                <div>Developed RTL for AMBA AHB-APB Bridge in Verilog</div>
+                            </div>
+                            <div class="flex gap-4">
+                                <i class="fa-solid fa-check text-emerald-400 mt-1.5"></i>
+                                <div>Implemented FSM-based protocol control logic</div>
+                            </div>
+                            <div class="flex gap-4">
+                                <i class="fa-solid fa-check text-emerald-400 mt-1.5"></i>
+                                <div>Created self-checking testbenches and performed waveform debugging</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-10">
+                            <span class="text-xs px-4 py-2 bg-zinc-800 rounded-3xl">Verilog</span>
+                            <span class="text-xs px-4 py-2 bg-zinc-800 rounded-3xl">AMBA</span>
+                            <span class="text-xs px-4 py-2 bg-zinc-800 rounded-3xl">FPGA</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -323,12 +359,12 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-end mb-12">
                 <div>
-                    <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">03 — WORK</span>
+                    <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">03 — PROJECTS</span>
                     <h2 class="section-header text-5xl font-semibold mt-6">Featured Projects</h2>
                 </div>
                 <a href="https://github.com/Ezhilkirthik" target="_blank" 
                    class="text-cyan-400 hover:text-cyan-300 flex items-center gap-2 text-sm font-medium">
-                    ALL PROJECTS ON GITHUB <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    VIEW ALL ON GITHUB <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 </a>
             </div>
             
@@ -342,7 +378,7 @@
                             <span class="text-[10px] font-mono bg-zinc-800 px-3 py-1 rounded-2xl">POWER</span>
                         </div>
                         <h3 class="font-semibold text-xl mb-3 group-hover:text-cyan-400 transition-colors">High-Efficiency Synchronous DC-DC Buck Converter</h3>
-                        <p class="text-zinc-400 text-sm line-clamp-3">12V-to-5V synchronous buck converter with digital control. Validated using oscilloscopes, multimeters and prototype PCBs.</p>
+                        <p class="text-zinc-400 text-sm line-clamp-3">12V-to-5V synchronous buck converter modeled in LTspice and MATLAB. Validated with lab instruments, oscilloscope measurements and prototype PCB assemblies.</p>
                         <div class="mt-8 text-xs flex items-center gap-2 text-emerald-400">
                             <i class="fa-solid fa-link"></i>
                             <span>GITHUB</span>
@@ -441,57 +477,105 @@
     <!-- SKILLS -->
     <section id="skills" class="py-24 bg-zinc-900">
         <div class="max-w-7xl mx-auto px-6">
-            <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">04 — CAPABILITIES</span>
+            <span class="px-4 py-1.5 text-xs font-mono border border-cyan-300/30 text-cyan-400 rounded-full">04 — SKILLS</span>
             <h2 class="section-header text-5xl font-semibold mt-6 mb-16">Technical Expertise</h2>
             
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
-                <div class="space-y-8">
-                    <div>
-                        <div class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Hardware &amp; Tools</div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">LTspice</span>
-                            <span class="skill-pill">MATLAB</span>
-                            <span class="skill-pill">Simulink</span>
-                            <span class="skill-pill">Xilinx Vivado</span>
-                            <span class="skill-pill">STM32CubeIDE</span>
-                            <span class="skill-pill">Eagle PCB</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Languages</div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">Verilog</span>
-                            <span class="skill-pill">Embedded C</span>
-                            <span class="skill-pill">Python</span>
-                            <span class="skill-pill">MATLAB</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="space-y-8">
-                    <div>
-                        <div class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Domains</div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">Power Electronics</span>
-                            <span class="skill-pill">FPGA Design</span>
-                            <span class="skill-pill">Embedded Systems</span>
-                            <span class="skill-pill">RTL Design</span>
-                            <span class="skill-pill">Digital Signal Processing</span>
-                            <span class="skill-pill">Sensor Interfacing</span>
-                        </div>
-                    </div>
-                </div>
-                
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <!-- Electrical & Circuit Skills -->
                 <div>
-                    <div class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Protocols &amp; Standards</div>
-                    <div class="grid grid-cols-2 gap-3 text-sm">
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> CAN</div>
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> I2C</div>
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> SPI</div>
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> UART</div>
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> AMBA AHB</div>
-                        <div class="flex items-center gap-2"><i class="fa-solid fa-circle text-[6px] text-emerald-400"></i> ISO 26262</div>
+                    <div class="flex items-center gap-3 mb-8">
+                        <i class="fa-solid fa-bolt text-3xl text-cyan-400"></i>
+                        <div>
+                            <div class="uppercase text-sm tracking-widest font-semibold text-cyan-400">Electrical &amp; Circuit</div>
+                            <div class="text-xs text-zinc-500">Core Hardware Skills</div>
+                        </div>
                     </div>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="skill-pill">Circuit Analysis</div>
+                        <div class="skill-pill">Analog Electronics</div>
+                        <div class="skill-pill">Signal Conditioning</div>
+                        <div class="skill-pill">Sensor Interface Design</div>
+                        <div class="skill-pill">Voltage Dividers</div>
+                        <div class="skill-pill">Comparator Circuits</div>
+                        <div class="skill-pill">Control Systems</div>
+                        <div class="skill-pill">EMI/EMC Basics</div>
+                        <div class="skill-pill">Low-Voltage Design</div>
+                    </div>
+                </div>
+
+                <!-- Programming & Domains -->
+                <div>
+                    <div class="flex items-center gap-3 mb-8">
+                        <i class="fa-solid fa-microchip text-3xl text-emerald-400"></i>
+                        <div>
+                            <div class="uppercase text-sm tracking-widest font-semibold text-emerald-400">Programming &amp; Domains</div>
+                            <div class="text-xs text-zinc-500">Software &amp; Expertise</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="skill-pill">Verilog</div>
+                        <div class="skill-pill">Embedded C</div>
+                        <div class="skill-pill">Python</div>
+                        <div class="skill-pill">MATLAB</div>
+                        <div class="skill-pill">FPGA Design</div>
+                        <div class="skill-pill">RTL Design</div>
+                        <div class="skill-pill">Digital Logic</div>
+                        <div class="skill-pill">DSP</div>
+                        <div class="skill-pill">Embedded Systems</div>
+                        <div class="skill-pill">PCB Design</div>
+                        <div class="skill-pill">IoT Systems</div>
+                        <div class="skill-pill">STM32</div>
+                        <div class="skill-pill">Raspberry Pi</div>
+                    </div>
+                </div>
+
+                <!-- Tools, Standards & Protocols -->
+                <div>
+                    <div class="flex items-center gap-3 mb-8">
+                        <i class="fa-solid fa-toolbox text-3xl text-amber-400"></i>
+                        <div>
+                            <div class="uppercase text-sm tracking-widest font-semibold text-amber-400">Tools &amp; Standards</div>
+                            <div class="text-xs text-zinc-500">Software &amp; Compliance</div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <!-- Tools -->
+                        <div class="skill-pill">Xilinx Vivado</div>
+                        <div class="skill-pill">ModelSim</div>
+                        <div class="skill-pill">LTspice</div>
+                        <div class="skill-pill">STM32CubeIDE</div>
+                        <div class="skill-pill">Eagle PCB</div>
+                        <div class="skill-pill">Simulink</div>
+                        <div class="skill-pill">Proteus</div>
+                        <div class="skill-pill">Ansys</div>
+                        <!-- Standards -->
+                        <div class="skill-pill">IEEE 1364</div>
+                        <div class="skill-pill">MISRA-C</div>
+                        <div class="skill-pill">ISO 26262</div>
+                        <div class="skill-pill">IEC 61000</div>
+                        <div class="skill-pill">IPC-2221</div>
+                        <!-- Protocols -->
+                        <div class="skill-pill">CAN</div>
+                        <div class="skill-pill">UART</div>
+                        <div class="skill-pill">I2C</div>
+                        <div class="skill-pill">SPI</div>
+                        <div class="skill-pill">AMBA AHB/APB</div>
+                        <div class="skill-pill">Bluetooth</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Skills -->
+            <div class="mt-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <i class="fa-solid fa-user-tie text-3xl text-violet-400"></i>
+                    <div class="uppercase text-sm tracking-widest font-semibold text-violet-400">Professional Skills</div>
+                </div>
+                <div class="flex flex-wrap gap-3 max-w-4xl">
+                    <div class="skill-pill">Technical Proposal Formulation</div>
+                    <div class="skill-pill">Feasibility Analysis</div>
+                    <div class="skill-pill">Requirement Traceability</div>
+                    <div class="skill-pill">Subsystem Validation</div>
                 </div>
             </div>
         </div>
@@ -649,30 +733,6 @@
             });
         }
         
-        // Download resume
-        function downloadResume() {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-                background: #0a0a0a; color: #67e8f9; border: 1px solid #67e8f9; 
-                padding: 16px 28px; border-radius: 9999px; font-size: 14px;
-                box-shadow: 0 0 30px -5px rgb(103 232 249);
-                display: flex; align-items: center; gap: 12px; z-index: 9999;
-            `;
-            notification.innerHTML = `
-                <i class="fa-solid fa-check"></i>
-                <span>Resume downloaded (demo). Full version available on request.</span>
-            `;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 1, 1)';
-                notification.style.opacity = '0';
-                notification.style.transform = 'translate(-50%, 20px)';
-                setTimeout(() => notification.remove(), 400);
-            }, 2800);
-        }
-        
         // Project modal
         function showProjectDetail(id) {
             const modal = document.getElementById('projectModal');
@@ -818,16 +878,70 @@
             });
         }
         
+        // Typing Animation
+        function startTypingAnimation() {
+            const roles = ["Electronics Engineer", "FPGA Developer", "Embedded Systems Engineer", "Power Electronics Specialist"];
+            let roleIndex = 0;
+            let charIndex = 0;
+            let currentText = '';
+            let isDeleting = false;
+            const typingElement = document.getElementById('typing-text');
+            
+            function type() {
+                const currentRole = roles[roleIndex];
+                
+                if (isDeleting) {
+                    currentText = currentRole.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    currentText = currentRole.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+                
+                typingElement.textContent = currentText;
+                
+                let typeSpeed = isDeleting ? 30 : 60;
+                
+                if (!isDeleting && charIndex === currentRole.length) {
+                    typeSpeed = 1500;
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    roleIndex = (roleIndex + 1) % roles.length;
+                    typeSpeed = 300;
+                }
+                
+                setTimeout(type, typeSpeed);
+            }
+            
+            type();
+        }
+        
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-button');
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                icon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+            } else {
+                mobileMenu.classList.add('hidden');
+                icon.innerHTML = '<i class="fa-solid fa-bars"></i>';
+            }
+        }
+        
         // Initialize everything
         function initialize() {
             initializeTailwind();
             setupSmoothScroll();
             setupActiveNav();
             setupKeyboard();
+            startTypingAnimation();
             
-            // Make first nav active
-            const firstLink = document.querySelector('.nav-link');
-            if (firstLink) firstLink.classList.add('active');
+            // Mobile menu button
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileMenu);
             
             console.log('%c✓ Ezhilkirthik Portfolio loaded successfully. Electronics theme active.', 'color:#67e8f9; font-family:monospace');
         }
