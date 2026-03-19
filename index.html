@@ -64,8 +64,27 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 .hinner{position:relative;z-index:1;max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:center}
 
 .heyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border:1px solid rgba(0,245,255,.25);border-radius:100px;margin-bottom:2rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-emerald);background:rgba(0,255,163,.05);opacity:0;animation:fup .8s .2s var(--expo) forwards}
-.edot{width:6px;height:6px;background:var(--c-emerald);border-radius:50%;animation:pdot 2s infinite}
-@keyframes pdot{50%{opacity:.4;transform:scale(.7)}}
+.edot{
+  width:10px;
+  height:10px;
+  background:#00ffc8;
+  border-radius:50%;
+  position:relative;
+}
+
+.edot::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid #00ffc8;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);opacity:1;}
+  100%{transform:scale(2);opacity:0;}
+}
 
 /* WAVE NAME */
 .hname{font-size:clamp(3.5rem,7vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.03em;color:var(--c-white);opacity:0;animation:fup .9s .35s var(--expo) forwards;margin-bottom:.5rem}
