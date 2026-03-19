@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offline — ECE Game Lab | EZHILKIRTHIK M</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030508;--surf:#080d14;--surf2:#0d1520;
+  --cyan:#00f5ff;--em:#00ffa3;--am:#ffb347;--pink:#ff6bff;--red:#ff4466;
+  --text:#d4e0f0;--muted:#5a7088;--white:#f0f8ff;
+  --border:rgba(0,245,255,0.12);
+  --fd:'Syne',sans-serif;--fm:'DM Mono',monospace;
+  --expo:cubic-bezier(.19,1,.22,1);--bounce:cubic-bezier(.34,1.56,.64,1);
+}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--fd);min-height:100vh;overflow-x:hidden;cursor:default}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+::selection{background:var(--cyan);color:#000}
+
+/* ── BG ── */
+.gridbg{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(0,245,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.03) 1px,transparent 1px);background-size:48px 48px;animation:gdrift 30s linear infinite;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);pointer-events:none}
+@keyframes gdrift{100%{background-position:48px 48px}}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;animation:ofl 9s ease-in-out infinite alternate}
+.o1{width:500px;height:500px;background:rgba(0,245,255,.06);top:-150px;right:-100px}
+.o2{width:350px;height:350px;background:rgba(0,255,163,.05);bottom:-80px;left:-80px;animation-duration:12s;animation-delay:-5s}
+.o3{width:200px;height:200px;background:rgba(255,107,255,.04);top:50%;left:50%;animation-duration:7s;animation-delay:-3s}
+@keyframes ofl{100%{transform:translateY(-40px) scale(1.08)}}
+#noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
+
+/* ── LAYOUT ── */
+.wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── HEADER ── */
+.hdr{text-align:center;padding:2.5rem 0 2rem}
+.hdr-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.62rem;letter-spacing:.2em;color:var(--red);background:rgba(255,68,102,.07);border:1px solid rgba(255,68,102,.2);padding:.35rem 1rem;border-radius:100px;margin-bottom:1.25rem}
+.badge-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:bdot 1s infinite}
+@keyframes bdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hdr h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;letter-spacing:-.03em;color:var(--white);line-height:1}
+.hdr h1 .out{color:transparent;-webkit-text-stroke:1px rgba(0,245,255,.4)}
+.hdr-bar{width:60px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--em));border-radius:2px;margin:.8rem auto}
+.hdr p{font-family:var(--fm);font-size:.75rem;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem}
+.online-btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:#000;background:linear-gradient(135deg,var(--cyan),var(--em));padding:.5rem 1.2rem;border-radius:100px;border:none;cursor:pointer;transition:transform .3s var(--bounce),box-shadow .3s;text-decoration:none}
+.online-btn:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 24px rgba(0,245,255,.3)}
+
+/* ── SCORE BAR ── */
+.scorebar{display:flex;align-items:center;justify-content:center;gap:2rem;padding:.75rem 2rem;background:var(--surf);border:1px solid var(--border);border-radius:1rem;margin-bottom:2rem;font-family:var(--fm);font-size:.72rem;letter-spacing:.1em}
+.sc-item{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.sc-val{font-size:1.4rem;font-weight:800;font-family:var(--fd);color:var(--cyan)}
+.sc-lbl{color:var(--muted);font-size:.6rem;letter-spacing:.15em}
+.sc-sep{width:1px;height:30px;background:var(--border)}
+
+/* ── GAME TABS ── */
+.tabs{display:flex;gap:.75rem;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:.25rem}
+.tab{flex-shrink:0;font-family:var(--fm);font-size:.65rem;letter-spacing:.15em;padding:.55rem 1.25rem;border-radius:100px;border:1px solid var(--border);background:var(--surf);color:var(--muted);cursor:pointer;transition:all .25s var(--bounce)}
+.tab:hover{border-color:rgba(0,245,255,.3);color:var(--white)}
+.tab.active{background:linear-gradient(135deg,rgba(0,245,255,.12),rgba(0,255,163,.08));border-color:rgba(0,245,255,.4);color:var(--cyan)}
+.tab .ticon{margin-right:.4rem}
+
+/* ── GAME PANEL ── */
+.gp{display:none;animation:gin .4s var(--expo)}
+.gp.active{display:block}
+@keyframes gin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── GAME CARD ── */
+.gc{background:var(--surf);border:1px solid var(--border);border-radius:1.5rem;padding:2rem;position:relative;overflow:hidden}
+.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.gc.cyan::before{background:linear-gradient(90deg,var(--cyan),var(--em))}
+.gc.amber::before{background:linear-gradient(90deg,var(--am),#ff6b35)}
+.gc.pink::before{background:linear-gradient(90deg,var(--pink),#a855f7)}
+.gc-title{font-size:1.1rem;font-weight:800;color:var(--white);margin-bottom:.25rem}
+.gc-sub{font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-bottom:1.5rem}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.5rem;border-radius:100px;border:none;cursor:pointer;font-family:var(--fd);font-weight:700;font-size:.75rem;letter-spacing:.1em;transition:transform .25s var(--bounce),box-shadow .25s;position:relative;overflow:hidden}
+.btn-cy{background:linear-gradient(135deg,var(--cyan),var(--em));color:#000}
+.btn-cy:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 10px 28px rgba(0,245,255,.3)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:rgba(0,245,255,.3);color:var(--white);transform:translateY(-1px)}
+.btn-am{background:linear-gradient(135deg,var(--am),#ff6b35);color:#000}
+.btn-am:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,179,71,.3)}
+.btn-pk{background:linear-gradient(135deg,var(--pink),#a855f7);color:#fff}
+.btn-pk:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,107,255,.3)}
+.btn-sm{padding:.45rem 1rem;font-size:.68rem}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none !important;box-shadow:none !important}
+
+/* ═══════════════════════════════════
+   GAME 1 — LOGIC GATE QUIZ
+═══════════════════════════════════ */
+.gate-display{display:flex;align-items:center;justify-content:center;gap:2rem;margin:1.5rem 0;flex-wrap:wrap}
+.gate-svg-wrap{background:var(--surf2);border:1px solid var(--border);border-radius:1rem;padding:1.5rem 2rem;display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.gate-svg-wrap svg{display:block}
+.gate-inputs{display:flex;flex-direction:column;gap:.75rem}
+.gate-input-row{display:flex;align-items:center;gap:.75rem;font-family:var(--fm);font-size:.8rem}
+.ginput-lbl{color:var(--muted);width:20px;text-align:right}
+.toggle-btn{width:52px;height:28px;border-radius:14px;border:1px solid var(--border);background:var(--bg);cursor:pointer;position:relative;transition:background .25s,border-color .25s}
+.toggle-btn.on{background:rgba(0,245,255,.2);border-color:var(--cyan)}
+.toggle-btn::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .25s var(--bounce),background .25s}
+.toggle-btn.on::after{transform:translateX(24px);background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.ginput-val{font-size:.9rem;font-weight:800;color:var(--muted);width:16px}
+.toggle-btn.on + .ginput-val{color:var(--cyan)}
+.gate-output{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.gout-lbl{font-family:var(--fm);font-size:.62rem;letter-spacing:.12em;color:var(--muted)}
+.gout-val{width:52px;height:52px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:800;font-family:var(--fd);color:var(--muted);transition:all .3s var(--bounce);background:var(--bg)}
+.gout-val.hi{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.1);box-shadow:0 0 20px rgba(0,245,255,.2)}
+.gate-truth{margin-top:1rem}
+.truth-title{font-family:var(--fm);font-size:.62rem;letter-spacing:.15em;color:var(--muted);margin-bottom:.75rem}
+.truth-table{width:100%;border-collapse:collapse;font-family:var(--fm);font-size:.72rem}
+.truth-table th{color:var(--muted);letter-spacing:.1em;padding:.4rem .75rem;text-align:center;border-bottom:1px solid var(--border)}
+.truth-table td{padding:.4rem .75rem;text-align:center;border-bottom:1px solid rgba(0,245,255,.05);color:var(--text)}
+.truth-table tr.active-row td{background:rgba(0,245,255,.06);color:var(--cyan)}
+.truth-table td.hi{color:var(--cyan);font-weight:700}
+.truth-table td.lo{color:var(--muted)}
+.gate-quiz-section{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.quiz-q{font-size:.9rem;color:var(--white);margin-bottom:1rem;line-height:1.6}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.quiz-opt{padding:.65rem 1rem;border:1px solid var(--border);border-radius:.75rem;background:var(--surf2);color:var(--text);font-family:var(--fm);font-size:.75rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,transform .2s var(--bounce)}
+.quiz-opt:hover:not(:disabled){border-color:rgba(0,245,255,.3);background:rgba(0,245,255,.05);transform:translateY(-1px)}
+.quiz-opt.correct{border-color:var(--em)!important;background:rgba(0,255,163,.1)!important;color:var(--em)!important}
+.quiz-opt.wrong{border-color:var(--red)!important;background:rgba(255,68,102,.1)!important;color:var(--red)!important}
+.quiz-opt:disabled{cursor:not-allowed}
+.quiz-feedback{font-family:var(--fm);font-size:.78rem;min-height:1.4em;margin-bottom:.75rem;letter-spacing:.06em}
+.quiz-feedback.ok{color:var(--em)}.quiz-feedback.bad{color:var(--red)}
+.quiz-progress{height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-bottom:1rem}
+.quiz-prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--em));border-radius:2px;transition:width .4s var(--expo)}
+
+/* gate selector */
+.gate-sel{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.gsel-btn{font-family:var(--fm);font-size:.65rem;letter-spacing:.1em;padding:.35rem .9rem;border-radius:100px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .2s}
+.gsel-btn:hover,.gsel-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.06)}
+
+/* ═══════════════════════════════════
+   GAME 2 — COMPONENT MEMORY
+═══════════════════════════════════ */
+.mem-status{font-family:var(--fm);font-size:.72rem;letter-spacing:.1em;color:var(--am);margin-bottom:1rem;min-height:1.2em}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.5rem}
+.mem-card{aspect-ratio:1;border-radius:.75rem;border:1px solid var(--border);background:var(--surf2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform .2s var(--bounce),border-color .2s,box-shadow .2s;position:relative;overflow:hidden;user-select:none}
+.mem-card::before{content:'?';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:1rem;color:var(--muted);background:var(--surf2);transition:opacity .25s}
+.mem-card.flipped::before,.mem-card.matched::before{opacity:0}
+.mem-card:hover:not(.matched):not(.flipped):not(.disabled){transform:scale(1.06);border-color:rgba(255,179,71,.3)}
+.mem-card.flipped{border-color:rgba(255,179,71,.4);background:rgba(255,179,71,.08)}
+.mem-card.matched{border-color:rgba(0,255,163,.4);background:rgba(0,255,163,.08);cursor:default;animation:matched-pop .4s var(--bounce)}
+@keyframes matched-pop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
+.mem-card.wrong-flash{animation:wrong-fl .4s}
+@keyframes wrong-fl{0%,100%{border-color:var(--border)}25%,75%{border-color:var(--red);background:rgba(255,68,102,.1)}}
+.mem-info{display:flex;gap:1rem;font-family:var(--fm);font-size:.72rem;color:var(--muted)}
+.mem-info span{color:var(--am)}
+.mem-legend{margin-top:1rem;padding:1rem;background:var(--surf2);border-radius:.75rem;border:1px solid var(--border)}
+.mem-legend-title{font-family:var(--fm);font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-bottom:.6rem}
+.mem-legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.4rem}
+.mem-leg-item{display:flex;align-items:center;gap:.4rem;font-family:var(--fm);font-size:.62rem;color:var(--muted)}
+
+/* ═══════════════════════════════════
+   GAME 3 — RESISTOR COLOR CODE
+═══════════════════════════════════ */
+.res-body{display:flex;align-items:center;justify-content:center;margin:1.5rem 0}
+.res-svg-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.res-bands-hint{font-family:var(--fm);font-size:.62rem;letter-spacing:.1em;color:var(--muted)}
+.res-question{text-align:center;margin-bottom:1.25rem}
+.res-q-label{font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.4rem}
+.res-q-val{font-size:1.8rem;font-weight:800;color:var(--white);letter-spacing:-.02em}
+.res-q-unit{font-size:.9rem;color:var(--muted)}
+.color-palette{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-bottom:1.25rem}
+.color-swatch{padding:.55rem .4rem;border-radius:.6rem;border:2px solid transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.3rem;transition:transform .2s var(--bounce),border-color .2s;font-family:var(--fm);font-size:.55rem;letter-spacing:.05em;color:rgba(255,255,255,.7)}
+.color-swatch:hover{transform:scale(1.08);border-color:rgba(255,255,255,.4)}
+.color-swatch.selected{border-color:#fff;transform:scale(1.1);box-shadow:0 0 12px rgba(255,255,255,.3)}
+.color-swatch.correct-pick{border-color:var(--em)!important;box-shadow:0 0 16px rgba(0,255,163,.4)!important}
+.color-swatch.wrong-pick{border-color:var(--red)!important;animation:res-wrong .4s}
+@keyframes res-wrong{0%,100%{transform:scale(1)}50%{transform:scale(.9)}}
+.color-dot{width:28px;height:28px;border-radius:50%}
+.res-bands-selected{display:flex;gap:.5rem;align-items:center;justify-content:center;margin-bottom:1rem;font-family:var(--fm);font-size:.72rem;color:var(--muted)}
+.rband-slot{width:32px;height:14px;border-radius:3px;border:1px dashed rgba(0,245,255,.25);background:transparent;transition:background .3s}
+.rband-slot.filled{border-style:solid;border-color:rgba(255,255,255,.2)}
+.res-feedback{text-align:center;font-family:var(--fm);font-size:.8rem;letter-spacing:.06em;min-height:1.4em;margin-bottom:.75rem}
+.res-feedback.ok{color:var(--em)}.res-feedback.bad{color:var(--red)}
+.res-score-row{display:flex;gap:1rem;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:1rem}
+.res-mode-row{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
+.res-mode-btn{font-family:var(--fm);font-size:.62rem;letter-spacing:.1em;padding:.35rem .9rem;border-radius:100px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .2s}
+.res-mode-btn.active{border-color:var(--pink);color:var(--pink);background:rgba(255,107,255,.06)}
+
+/* ═══════════════════════════════════
+   GAME 4 — OHM'S LAW CHALLENGE  
+═══════════════════════════════════ */
+.ohm-display{background:var(--surf2);border:1px solid var(--border);border-radius:1rem;padding:1.5rem;margin-bottom:1.5rem;text-align:center}
+.ohm-formula{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;color:var(--white);margin-bottom:.5rem}
+.ohm-formula .var{color:var(--pink)}
+.ohm-formula .eq{color:var(--muted)}
+.ohm-given{display:flex;gap:2rem;justify-content:center;margin:1rem 0;flex-wrap:wrap}
+.ohm-given-item{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.ohm-given-lbl{font-family:var(--fm);font-size:.6rem;letter-spacing:.12em;color:var(--muted)}
+.ohm-given-val{font-size:1.1rem;font-weight:700;color:var(--cyan)}
+.ohm-find{font-family:var(--fm);font-size:.72rem;letter-spacing:.1em;color:var(--am);margin-top:.5rem}
+.ohm-input-row{display:flex;gap:.75rem;align-items:center;justify-content:center;margin-bottom:1rem;flex-wrap:wrap}
+.ohm-input{background:var(--surf2);border:1px solid var(--border);border-radius:.75rem;padding:.65rem 1rem;color:var(--white);font-family:var(--fm);font-size:1rem;width:150px;text-align:center;outline:none;transition:border-color .2s}
+.ohm-input:focus{border-color:var(--pink)}
+.ohm-unit{font-family:var(--fm);font-size:.75rem;color:var(--muted)}
+.ohm-feedback{text-align:center;font-family:var(--fm);font-size:.8rem;min-height:1.4em;margin-bottom:.75rem;letter-spacing:.06em}
+.ohm-feedback.ok{color:var(--em)}.ohm-feedback.bad{color:var(--red)}
+.ohm-progress{display:flex;gap:.4rem;justify-content:center;margin-bottom:1rem}
+.ohm-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .3s}
+.ohm-dot.done{background:var(--em)}.ohm-dot.active{background:var(--pink)}
+
+/* ── GAME OVER / WIN SCREEN ── */
+.result-screen{text-align:center;padding:2rem}
+.result-emoji{font-size:4rem;display:block;margin-bottom:1rem;animation:rebounce 1s var(--bounce)}
+@keyframes rebounce{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.result-title{font-size:1.6rem;font-weight:800;color:var(--white);margin-bottom:.5rem}
+.result-sub{font-family:var(--fm);font-size:.75rem;color:var(--muted);margin-bottom:1.5rem;letter-spacing:.08em}
+.result-stat{font-size:2.5rem;font-weight:800;color:var(--cyan);margin-bottom:.25rem}
+
+/* ── GLOBAL SCORE ── */
+.gscore-pop{position:fixed;top:1.5rem;right:1.5rem;z-index:100;font-family:var(--fm);font-size:.75rem;letter-spacing:.1em;color:var(--cyan);background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.2);padding:.5rem 1rem;border-radius:100px;opacity:0;transform:translateY(-8px);transition:opacity .3s,transform .3s;pointer-events:none}
+.gscore-pop.show{opacity:1;transform:translateY(0)}
+
+/* ── FOOTER ── */
+.foot{text-align:center;padding-top:2rem;border-top:1px solid var(--border);font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:var(--muted)}
+.foot a{color:var(--cyan);text-decoration:none}
+
+@media(max-width:600px){
+  .quiz-opts{grid-template-columns:1fr}.color-palette{grid-template-columns:repeat(5,1fr)}
+  .mem-grid{grid-template-columns:repeat(4,1fr)}.gate-display{gap:1rem}
+  .ohm-given{gap:1rem}
+}
+</style>
+</head>
+<body>
+<div class="gridbg"></div>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<div id="noise"></div>
+
+<!-- +XP popup -->
+<div class="gscore-pop" id="xp-pop">+10 XP ⚡</div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-badge"><span class="badge-dot"></span>NO INTERNET — GAME MODE ACTIVE</div>
+    <h1>ECE <span class="out">Game</span> Lab</h1>
+    <div class="hdr-bar"></div>
+    <p>You're offline — might as well level up your electronics knowledge</p>
+    <a href="/" class="online-btn" onclick="window.location.reload();return false;">↗ BACK ONLINE</a>
+  </div>
+
+  <!-- GLOBAL SCOREBOARD -->
+  <div class="scoreboard" id="scoreboard" style="display:none">
+    <div class="scorebar">
+      <div class="sc-item"><span class="sc-val" id="g-xp">0</span><span class="sc-lbl">TOTAL XP</span></div>
+      <div class="sc-sep"></div>
+      <div class="sc-item"><span class="sc-val" id="g-streak">0</span><span class="sc-lbl">STREAK 🔥</span></div>
+      <div class="sc-sep"></div>
+      <div class="sc-item"><span class="sc-val" id="g-correct">0</span><span class="sc-lbl">CORRECT</span></div>
+    </div>
+  </div>
+
+  <!-- GAME TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchGame('logic')" id="tab-logic"><span class="ticon">🔌</span>LOGIC GATES</div>
+    <div class="tab" onclick="switchGame('memory')" id="tab-memory"><span class="ticon">🧠</span>COMPONENT MATCH</div>
+    <div class="tab" onclick="switchGame('resistor')" id="tab-resistor"><span class="ticon">🎨</span>COLOR CODE</div>
+    <div class="tab" onclick="switchGame('ohm')" id="tab-ohm"><span class="ticon">⚡</span>OHM'S LAW</div>
+  </div>
+
+  <!-- ═══════════════════ GAME 1: LOGIC GATES ═══════════════════ -->
+  <div class="gp active" id="gp-logic">
+    <div class="gc cyan">
+      <div class="gc-title">🔌 Logic Gate Simulator + Quiz</div>
+      <div class="gc-sub">INTERACT WITH GATES · ANSWER QUIZ QUESTIONS</div>
+
+      <!-- Gate selector -->
+      <div class="gate-sel" id="gate-sel"></div>
+
+      <!-- Interactive gate display -->
+      <div class="gate-display">
+        <div class="gate-inputs" id="gate-inputs"></div>
+        <div class="gate-svg-wrap">
+          <svg id="gate-svg" width="120" height="80" viewBox="0 0 120 80"></svg>
+          <div style="font-family:var(--fm);font-size:.62rem;letter-spacing:.1em;color:var(--muted)" id="gate-name-lbl">AND</div>
+        </div>
+        <div class="gate-output">
+          <div class="gout-lbl">OUTPUT Q</div>
+          <div class="gout-val" id="gate-out">0</div>
+        </div>
+      </div>
+
+      <!-- Truth table -->
+      <div class="gate-truth">
+        <div class="truth-title">TRUTH TABLE</div>
+        <table class="truth-table" id="truth-tbl"></table>
+      </div>
+
+      <!-- Quiz section -->
+      <div class="gate-quiz-section">
+        <div class="quiz-progress"><div class="quiz-prog-fill" id="quiz-pf" style="width:0%"></div></div>
+        <div class="quiz-q" id="quiz-q">Loading question...</div>
+        <div class="quiz-opts" id="quiz-opts"></div>
+        <div class="quiz-feedback" id="quiz-fb"></div>
+        <button class="btn btn-cy btn-sm" id="quiz-next" onclick="nextQuizQ()" disabled>NEXT →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ GAME 2: COMPONENT MEMORY ═══════════════════ -->
+  <div class="gp" id="gp-memory">
+    <div class="gc amber">
+      <div class="gc-title">🧠 Component Memory Match</div>
+      <div class="gc-sub">MATCH EACH COMPONENT WITH ITS SYMBOL</div>
+      <div class="mem-status" id="mem-status">Flip cards to find matching pairs!</div>
+      <div class="mem-grid" id="mem-grid"></div>
+      <div class="mem-info">
+        <span>Moves: <span id="mem-moves">0</span></span>
+        <span>Matched: <span id="mem-matched">0</span>/8</span>
+        <span>Time: <span id="mem-time">0s</span></span>
+      </div>
+      <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn btn-am btn-sm" onclick="initMemory()">NEW GAME</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleMemLegend()">📖 LEGEND</button>
+      </div>
+      <div class="mem-legend" id="mem-legend" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ GAME 3: RESISTOR COLOR CODE ═══════════════════ -->
+  <div class="gp" id="gp-resistor">
+    <div class="gc pink">
+      <div class="gc-title">🎨 Resistor Color Code Challenge</div>
+      <div class="gc-sub">DECODE THE BANDS — READ THE RESISTANCE</div>
+
+      <div class="res-mode-row">
+        <button class="res-mode-btn active" id="rmode-read" onclick="setResMode('read')">READ → VALUE</button>
+        <button class="res-mode-btn" id="rmode-pick" onclick="setResMode('pick')">VALUE → COLORS</button>
+      </div>
+
+      <!-- Resistor SVG -->
+      <div class="res-body">
+        <div class="res-svg-wrap">
+          <svg width="260" height="70" viewBox="0 0 260 70" id="res-svg">
+            <!-- wire left -->
+            <line x1="0" y1="35" x2="50" y2="35" stroke="#5a7088" stroke-width="2.5"/>
+            <!-- body -->
+            <rect x="50" y="18" width="160" height="34" rx="6" fill="#1a2535" stroke="rgba(0,245,255,.2)" stroke-width="1.5"/>
+            <!-- bands -->
+            <rect x="72" y="18" width="14" height="34" rx="2" id="rb1" fill="#333"/>
+            <rect x="96" y="18" width="14" height="34" rx="2" id="rb2" fill="#333"/>
+            <rect x="120" y="18" width="14" height="34" rx="2" id="rb3" fill="#333"/>
+            <rect x="154" y="18" width="14" height="34" rx="2" id="rb4" fill="#333"/>
+            <!-- wire right -->
+            <line x1="210" y1="35" x2="260" y2="35" stroke="#5a7088" stroke-width="2.5"/>
+          </svg>
+          <div class="res-bands-hint" id="res-bands-hint">4-band resistor</div>
+        </div>
+      </div>
+
+      <!-- READ MODE -->
+      <div id="res-read-mode">
+        <div class="res-question">
+          <div class="res-q-label">WHAT IS THE RESISTANCE?</div>
+          <div class="res-q-val"><span id="res-answer-display">???</span> <span class="res-q-unit">Ω</span></div>
+        </div>
+        <div class="color-palette" id="res-palette-read"></div>
+        <div class="res-bands-selected" id="res-bands-selected">
+          <div style="font-family:var(--fm);font-size:.62rem;color:var(--muted);letter-spacing:.1em">YOUR BANDS:</div>
+          <div class="rband-slot" id="rbs-1"></div>
+          <div class="rband-slot" id="rbs-2"></div>
+          <div class="rband-slot" id="rbs-3"></div>
+          <div class="rband-slot" id="rbs-4"></div>
+          <div id="rbs-reset" style="font-family:var(--fm);font-size:.6rem;color:var(--muted);cursor:pointer;letter-spacing:.08em" onclick="clearResBands()">✕ CLEAR</div>
+        </div>
+        <div class="res-feedback" id="res-fb-read"></div>
+        <div style="display:flex;gap:.6rem;justify-content:center">
+          <button class="btn btn-pk btn-sm" onclick="checkResRead()">CHECK ANSWER</button>
+          <button class="btn btn-ghost btn-sm" onclick="newResQuestion()">SKIP →</button>
+        </div>
+      </div>
+
+      <!-- PICK MODE -->
+      <div id="res-pick-mode" style="display:none">
+        <div class="res-question">
+          <div class="res-q-label">CLICK THE CORRECT BANDS FOR:</div>
+          <div class="res-q-val"><span id="res-pick-val">470</span> <span class="res-q-unit">Ω</span></div>
+        </div>
+        <div style="font-family:var(--fm);font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-align:center;margin-bottom:.75rem" id="res-pick-prompt">Select band 1</div>
+        <div class="color-palette" id="res-palette-pick"></div>
+        <div class="res-feedback" id="res-fb-pick"></div>
+        <button class="btn btn-ghost btn-sm" style="display:block;margin:0 auto" onclick="newPickQuestion()">SKIP →</button>
+      </div>
+
+      <div class="res-score-row" style="margin-top:1.25rem">
+        <span style="font-family:var(--fm);font-size:.7rem;color:var(--muted)">Correct: <span id="res-correct" style="color:var(--em)">0</span></span>
+        <span style="font-family:var(--fm);font-size:.7rem;color:var(--muted)">Total: <span id="res-total" style="color:var(--pink)">0</span></span>
+      </div>
+
+      <!-- Color reference -->
+      <details style="margin-top:1rem">
+        <summary style="font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;color:var(--muted);cursor:pointer;padding:.5rem 0">📖 COLOR REFERENCE TABLE</summary>
+        <div id="res-ref" style="margin-top:.75rem"></div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ GAME 4: OHM'S LAW ═══════════════════ -->
+  <div class="gp" id="gp-ohm">
+    <div class="gc cyan" style="--cyan-a:rgba(255,107,255,.12)">
+      <div class="gc-title" style="color:var(--pink)">⚡ Ohm's Law Challenge</div>
+      <div class="gc-sub">SOLVE FOR V, I, OR R — 10 ROUNDS</div>
+
+      <div id="ohm-game">
+        <div class="ohm-progress" id="ohm-dots"></div>
+        <div class="ohm-display">
+          <div class="ohm-formula"><span class="var">V</span><span class="eq"> = </span><span class="var">I</span><span class="eq"> × </span><span class="var">R</span></div>
+          <div class="ohm-given" id="ohm-given"></div>
+          <div class="ohm-find" id="ohm-find">Find: ?</div>
+        </div>
+        <div class="ohm-input-row">
+          <input class="ohm-input" id="ohm-input" type="number" placeholder="Enter value" step="any">
+          <span class="ohm-unit" id="ohm-unit">?</span>
+          <button class="btn btn-pk btn-sm" onclick="checkOhm()">CHECK</button>
+        </div>
+        <div class="ohm-feedback" id="ohm-fb"></div>
+        <div style="display:flex;gap:.6rem;justify-content:center">
+          <button class="btn btn-ghost btn-sm" onclick="skipOhm()">SKIP →</button>
+          <button class="btn btn-ghost btn-sm" onclick="initOhm()">RESTART</button>
+        </div>
+      </div>
+
+      <div id="ohm-result" style="display:none" class="result-screen">
+        <span class="result-emoji" id="ohm-emoji">🎯</span>
+        <div class="result-title" id="ohm-result-title">Round Complete!</div>
+        <div class="result-stat" id="ohm-result-score">0/10</div>
+        <div class="result-sub" id="ohm-result-sub">Keep practicing!</div>
+        <button class="btn btn-pk" onclick="initOhm()" style="margin-top:1rem">PLAY AGAIN</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    Made with ⚡ by <a href="/">EZHILKIRTHIK M</a> · Check back when you're online!
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   GLOBAL STATE
+══════════════════════════════════════════════ */
+let gXP = 0, gStreak = 0, gCorrect = 0;
+function addXP(n, label) {
+  gXP += n; gStreak++; gCorrect++;
+  document.getElementById('g-xp').textContent = gXP;
+  document.getElementById('g-streak').textContent = gStreak;
+  document.getElementById('g-correct').textContent = gCorrect;
+  document.getElementById('scoreboard').style.display = 'block';
+  const pop = document.getElementById('xp-pop');
+  pop.textContent = `+${n} XP ⚡`;
+  pop.classList.add('show');
+  setTimeout(() => pop.classList.remove('show'), 1800);
+}
+function resetStreak() { gStreak = 0; document.getElementById('g-streak').textContent = 0; }
+
+function switchGame(id) {
+  document.querySelectorAll('.gp').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('gp-' + id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+window.addEventListener('online', () => { window.location.href = '/'; });
+
+/* ══════════════════════════════════════════════
+   GAME 1 — LOGIC GATES
+══════════════════════════════════════════════ */
+const GATES = {
+  AND:  {inputs:2, fn:(a,b)=>a&b,  desc:'Output HIGH only when ALL inputs are HIGH'},
+  OR:   {inputs:2, fn:(a,b)=>a|b,  desc:'Output HIGH when ANY input is HIGH'},
+  NAND: {inputs:2, fn:(a,b)=>1-(a&b), desc:'Inverted AND — LOW only when ALL inputs HIGH'},
+  NOR:  {inputs:2, fn:(a,b)=>1-(a|b), desc:'Inverted OR — HIGH only when ALL inputs LOW'},
+  XOR:  {inputs:2, fn:(a,b)=>a^b,  desc:'HIGH when inputs are DIFFERENT'},
+  XNOR: {inputs:2, fn:(a,b)=>1-(a^b), desc:'HIGH when inputs are SAME'},
+  NOT:  {inputs:1, fn:(a)=>1-a,    desc:'Inverts the input signal'},
+  BUF:  {inputs:1, fn:(a)=>a,      desc:'Passes input directly to output'},
+};
+
+const GATE_SVGS = {
+  AND:  `<path d="M20 15 L60 15 Q90 15 90 40 Q90 65 60 65 L20 65 Z" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="10" y1="25" x2="20" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="10" y1="55" x2="20" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="90" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  OR:   `<path d="M20 15 Q40 15 60 15 Q95 15 95 40 Q95 65 60 65 Q40 65 20 65 Q35 40 20 15Z" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="10" y1="25" x2="28" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="10" y1="55" x2="28" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="95" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  NAND: `<path d="M20 15 L60 15 Q90 15 90 40 Q90 65 60 65 L20 65 Z" fill="none" stroke="#00f5ff" stroke-width="2"/><circle cx="95" cy="40" r="5" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="10" y1="25" x2="20" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="10" y1="55" x2="20" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="100" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  NOR:  `<path d="M20 15 Q40 15 60 15 Q95 15 95 40 Q95 65 60 65 Q40 65 20 65 Q35 40 20 15Z" fill="none" stroke="#00f5ff" stroke-width="2"/><circle cx="100" cy="40" r="5" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="10" y1="25" x2="28" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="10" y1="55" x2="28" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="105" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  XOR:  `<path d="M20 15 Q40 15 60 15 Q95 15 95 40 Q95 65 60 65 Q40 65 20 65 Q35 40 20 15Z" fill="none" stroke="#00f5ff" stroke-width="2"/><path d="M15 15 Q30 40 15 65" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="5" y1="25" x2="26" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="5" y1="55" x2="26" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="95" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  XNOR: `<path d="M20 15 Q40 15 60 15 Q95 15 95 40 Q95 65 60 65 Q40 65 20 65 Q35 40 20 15Z" fill="none" stroke="#00f5ff" stroke-width="2"/><path d="M15 15 Q30 40 15 65" fill="none" stroke="#00f5ff" stroke-width="2"/><circle cx="100" cy="40" r="5" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="5" y1="25" x2="26" y2="25" stroke="#5a7088" stroke-width="2"/><line x1="5" y1="55" x2="26" y2="55" stroke="#5a7088" stroke-width="2"/><line x1="105" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  NOT:  `<polygon points="20,15 85,40 20,65" fill="none" stroke="#00f5ff" stroke-width="2"/><circle cx="90" cy="40" r="5" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="5" y1="40" x2="20" y2="40" stroke="#5a7088" stroke-width="2"/><line x1="95" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+  BUF:  `<polygon points="20,15 90,40 20,65" fill="none" stroke="#00f5ff" stroke-width="2"/><line x1="5" y1="40" x2="20" y2="40" stroke="#5a7088" stroke-width="2"/><line x1="90" y1="40" x2="110" y2="40" stroke="#5a7088" stroke-width="2"/>`,
+};
+
+let curGate = 'AND', gateInputs = [0, 0];
+
+function initGates() {
+  // Gate selector buttons
+  const sel = document.getElementById('gate-sel');
+  sel.innerHTML = Object.keys(GATES).map(g =>
+    `<button class="gsel-btn ${g === curGate ? 'active' : ''}" onclick="selectGate('${g}')">${g}</button>`
+  ).join('');
+  renderGate();
+  initQuiz();
+}
+
+function selectGate(g) {
+  curGate = g;
+  gateInputs = GATES[g].inputs === 1 ? [0] : [0, 0];
+  document.querySelectorAll('.gsel-btn').forEach(b => b.classList.toggle('active', b.textContent === g));
+  renderGate();
+}
+
+function renderGate() {
+  const g = GATES[curGate];
+  // SVG
+  document.getElementById('gate-svg').innerHTML = GATE_SVGS[curGate] || '';
+  document.getElementById('gate-name-lbl').textContent = curGate;
+  // Inputs
+  const ic = document.getElementById('gate-inputs');
+  ic.innerHTML = gateInputs.map((v, i) => `
+    <div class="gate-input-row">
+      <span class="ginput-lbl">${String.fromCharCode(65+i)}</span>
+      <div class="toggle-btn ${v?'on':''}" onclick="toggleGateInput(${i})"></div>
+      <span class="ginput-val">${v}</span>
+    </div>`).join('');
+  // Output
+  const out = g.inputs === 1 ? g.fn(gateInputs[0]) : g.fn(gateInputs[0], gateInputs[1]);
+  const outEl = document.getElementById('gate-out');
+  outEl.textContent = out;
+  outEl.className = 'gout-val' + (out ? ' hi' : '');
+  // Truth table
+  buildTruthTable();
+}
+
+function toggleGateInput(i) {
+  gateInputs[i] = gateInputs[i] ? 0 : 1;
+  renderGate();
+}
+
+function buildTruthTable() {
+  const g = GATES[curGate];
+  const n = g.inputs;
+  const rows = n === 1 ? [[0],[1]] : [[0,0],[0,1],[1,0],[1,1]];
+  let html = `<thead><tr>${n===1?'<th>A</th>':'<th>A</th><th>B</th>'}<th>Q</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    const out = n === 1 ? g.fn(r[0]) : g.fn(r[0], r[1]);
+    const isActive = n === 1 ? r[0] === gateInputs[0] : r[0] === gateInputs[0] && r[1] === gateInputs[1];
+    html += `<tr class="${isActive ? 'active-row' : ''}">`;
+    r.forEach(v => html += `<td class="${v ? 'hi' : 'lo'}">${v}</td>`);
+    html += `<td class="${out ? 'hi' : 'lo'}">${out}</td></tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('truth-tbl').innerHTML = html;
+}
+
+// QUIZ
+const GATE_QUESTIONS = [
+  {q:'What does a NAND gate output when both inputs are HIGH (1)?', opts:['0','1','HIGH','Undefined'], ans:0, exp:'NAND = NOT AND. AND(1,1)=1, NOT(1)=0'},
+  {q:'Which gate outputs HIGH only when BOTH inputs are HIGH?', opts:['OR','AND','XOR','NOR'], ans:1, exp:'AND gate: output is 1 only when A=1 AND B=1'},
+  {q:'A NOT gate with input 0 gives output:', opts:['0','1','Floating','Error'], ans:1, exp:'NOT inverts: NOT(0) = 1'},
+  {q:'XOR gate outputs HIGH when inputs are:', opts:['Same','Different','Both 0','Both 1'], ans:1, exp:'XOR = eXclusive OR: HIGH only when inputs differ'},
+  {q:'How many universal gates does NAND alone need to build a NOT gate?', opts:['1','2','3','4'], ans:0, exp:'Short all NAND inputs together: NAND(A,A) = NOT(A)'},
+  {q:'NOR gate output when A=0, B=0:', opts:['0','1','Undefined','Floating'], ans:1, exp:'NOR = NOT OR. OR(0,0)=0, NOT(0)=1'},
+  {q:'XNOR gate outputs HIGH when inputs are:', opts:['Different','Same','Both 0 only','Both 1 only'], ans:1, exp:'XNOR is inverse of XOR — HIGH when inputs MATCH'},
+  {q:'A buffer gate is used primarily to:', opts:['Invert signals','Drive higher currents','Add signals','Subtract voltages'], ans:1, exp:'Buffers amplify current drive without changing logic level'},
+  {q:'Which combination builds an OR gate using only NAND gates?', opts:['3 NANDs','2 NANDs','4 NANDs','1 NAND'], ans:0, exp:'OR from NAND: NAND(NAND(A,A), NAND(B,B))'},
+  {q:'De Morgan\'s theorem states NAND(A,B) equals:', opts:['NOT(A) AND NOT(B)','NOT(A) OR NOT(B)','NOT(A AND B)','A OR B'], ans:1, exp:'De Morgan: NOT(A AND B) = NOT(A) OR NOT(B)'},
+  {q:'How many possible input combinations does a 3-input AND gate have?', opts:['4','6','8','16'], ans:2, exp:'2^n combinations: 2^3 = 8'},
+  {q:'What is the propagation delay in logic gates?', opts:['Power consumed','Time for output to respond to input','Voltage across gate','Current through gate'], ans:1, exp:'Propagation delay is the time from input change to stable output'},
+];
+
+let quizIdx = [], quizPos = 0, quizAnswered = false;
+function initQuiz() {
+  quizIdx = [...Array(GATE_QUESTIONS.length).keys()].sort(() => Math.random()-.5);
+  quizPos = 0; loadQuizQ();
+}
+function loadQuizQ() {
+  const q = GATE_QUESTIONS[quizIdx[quizPos % quizIdx.length]];
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('quiz-fb').className = 'quiz-feedback';
+  document.getElementById('quiz-next').disabled = true;
+  quizAnswered = false;
+  const c = document.getElementById('quiz-opts');
+  c.innerHTML = q.opts.map((o,i) =>
+    `<button class="quiz-opt" onclick="answerQuiz(${i})">${o}</button>`
+  ).join('');
+  const pct = ((quizPos % GATE_QUESTIONS.length) / GATE_QUESTIONS.length * 100);
+  document.getElementById('quiz-pf').style.width = pct + '%';
+}
+function answerQuiz(i) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = GATE_QUESTIONS[quizIdx[quizPos % quizIdx.length]];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  opts[q.ans].classList.add('correct');
+  const fb = document.getElementById('quiz-fb');
+  if (i === q.ans) {
+    fb.textContent = '✓ Correct! ' + q.exp; fb.className = 'quiz-feedback ok';
+    addXP(10);
+  } else {
+    opts[i].classList.add('wrong');
+    fb.textContent = '✗ ' + q.exp; fb.className = 'quiz-feedback bad';
+    resetStreak();
+  }
+  document.getElementById('quiz-next').disabled = false;
+}
+function nextQuizQ() { quizPos++; loadQuizQ(); }
+
+/* ══════════════════════════════════════════════
+   GAME 2 — COMPONENT MEMORY MATCH
+══════════════════════════════════════════════ */
+const COMPONENTS = [
+  {sym:'⚡', name:'Resistor', desc:'Limits current flow (Ω)'},
+  {sym:'⚙️', name:'Capacitor', desc:'Stores electric charge (F)'},
+  {sym:'🔮', name:'Inductor', desc:'Stores magnetic energy (H)'},
+  {sym:'💡', name:'LED', desc:'Light Emitting Diode'},
+  {sym:'🔋', name:'Battery', desc:'Voltage source'},
+  {sym:'🔀', name:'Transistor', desc:'Current amplifier / switch'},
+  {sym:'〰️', name:'Diode', desc:'One-way current valve'},
+  {sym:'📡', name:'Antenna', desc:'Radiates/receives EM waves'},
+];
+let memCards=[], memFlipped=[], memMatchedCount=0, memMoves=0, memLocked=false, memTimer=null, memSeconds=0;
+
+function initMemory() {
+  clearInterval(memTimer); memMatchedCount=0; memMoves=0; memSeconds=0; memFlipped=[]; memLocked=false;
+  document.getElementById('mem-moves').textContent=0;
+  document.getElementById('mem-matched').textContent=0;
+  document.getElementById('mem-time').textContent='0s';
+  document.getElementById('mem-status').textContent='Flip cards to find matching pairs!';
+  // create pairs: symbol + name
+  const pairs = COMPONENTS.map((c,i)=>[
+    {id:i,type:'sym',display:c.sym,match:i},
+    {id:i,type:'name',display:c.name,match:i}
+  ]).flat().sort(()=>Math.random()-.5);
+  memCards = pairs;
+  const grid = document.getElementById('mem-grid');
+  grid.innerHTML = pairs.map((c,i)=>`
+    <div class="mem-card" id="mc-${i}" onclick="flipCard(${i})">
+      <span style="position:relative;z-index:1;font-size:${c.type==='sym'?'1.8rem':'.75rem'};font-family:${c.type==='name'?'var(--fm)':'inherit'};text-align:center;color:${c.type==='name'?'var(--am)':'inherit'}">${c.display}</span>
+    </div>`).join('');
+  memTimer = setInterval(()=>{memSeconds++;document.getElementById('mem-time').textContent=memSeconds+'s';},1000);
+}
+
+function flipCard(i) {
+  if(memLocked) return;
+  const el = document.getElementById('mc-'+i);
+  if(el.classList.contains('flipped')||el.classList.contains('matched')) return;
+  el.classList.add('flipped');
+  memFlipped.push(i);
+  if(memFlipped.length===2){
+    memMoves++; document.getElementById('mem-moves').textContent=memMoves;
+    memLocked=true;
+    setTimeout(()=>{
+      const [a,b]=memFlipped;
+      if(memCards[a].match===memCards[b].match && memCards[a].type!==memCards[b].type){
+        document.getElementById('mc-'+a).classList.add('matched');
+        document.getElementById('mc-'+b).classList.add('matched');
+        document.getElementById('mc-'+a).classList.remove('flipped');
+        document.getElementById('mc-'+b).classList.remove('flipped');
+        memMatchedCount++;
+        document.getElementById('mem-matched').textContent=memMatchedCount;
+        document.getElementById('mem-status').textContent=`✓ Matched: ${COMPONENTS[memCards[a].match].name}! (${memMatchedCount}/8)`;
+        addXP(15);
+        if(memMatchedCount===8){
+          clearInterval(memTimer);
+          document.getElementById('mem-status').textContent=`🏆 All matched! ${memMoves} moves · ${memSeconds}s`;
+        }
+      } else {
+        document.getElementById('mc-'+a).classList.remove('flipped');
+        document.getElementById('mc-'+b).classList.remove('flipped');
+        document.getElementById('mc-'+a).classList.add('wrong-flash');
+        document.getElementById('mc-'+b).classList.add('wrong-flash');
+        setTimeout(()=>{
+          document.getElementById('mc-'+a).classList.remove('wrong-flash');
+          document.getElementById('mc-'+b).classList.remove('wrong-flash');
+        },400);
+        document.getElementById('mem-status').textContent='✗ No match — try again!';
+        resetStreak();
+      }
+      memFlipped=[]; memLocked=false;
+    },700);
+  }
+}
+
+function toggleMemLegend(){
+  const l=document.getElementById('mem-legend');
+  if(l.style.display==='none'){
+    l.style.display='block';
+    l.innerHTML=`<div class="mem-legend-title">COMPONENT REFERENCE</div><div class="mem-legend-grid">${COMPONENTS.map(c=>`<div class="mem-leg-item"><span style="font-size:1.1rem">${c.sym}</span><div><div style="color:var(--am);font-size:.65rem">${c.name}</div><div style="font-size:.58rem">${c.desc}</div></div></div>`).join('')}</div>`;
+  } else l.style.display='none';
+}
+
+/* ══════════════════════════════════════════════
+   GAME 3 — RESISTOR COLOR CODE
+══════════════════════════════════════════════ */
+const RCOLORS = [
+  {name:'Black',  hex:'#1a1a1a', val:0, mult:1,      tol:null},
+  {name:'Brown',  hex:'#8B4513', val:1, mult:10,     tol:'±1%'},
+  {name:'Red',    hex:'#dc2626', val:2, mult:100,    tol:'±2%'},
+  {name:'Orange', hex:'#f97316', val:3, mult:1000,   tol:null},
+  {name:'Yellow', hex:'#eab308', val:4, mult:10000,  tol:null},
+  {name:'Green',  hex:'#16a34a', val:5, mult:100000, tol:'±0.5%'},
+  {name:'Blue',   hex:'#2563eb', val:6, mult:1e6,    tol:'±0.25%'},
+  {name:'Violet', hex:'#7c3aed', val:7, mult:1e7,    tol:'±0.1%'},
+  {name:'Grey',   hex:'#6b7280', val:8, mult:1e8,    tol:'±0.05%'},
+  {name:'White',  hex:'#f3f4f6', val:9, mult:1e9,    tol:null},
+  {name:'Gold',   hex:'#b8860b', val:null,mult:0.1,  tol:'±5%'},
+  {name:'Silver', hex:'#9ca3af', val:null,mult:0.01, tol:'±10%'},
+];
+const TOL_COLORS = RCOLORS.filter(c=>c.tol);
+const DIG_COLORS = RCOLORS.filter(c=>c.val!==null && c.val<=9);
+const MULT_COLORS = RCOLORS.filter(c=>c.mult!==null);
+
+let resMode='read', resBands=[], resCorrect=0, resTotal=0;
+let curResBandData=[], curResValue=0;
+let pickBandData=[], pickStep=0;
+
+function setResMode(m){
+  resMode=m;
+  document.getElementById('res-read-mode').style.display=m==='read'?'block':'none';
+  document.getElementById('res-pick-mode').style.display=m==='pick'?'block':'none';
+  document.getElementById('rmode-read').classList.toggle('active',m==='read');
+  document.getElementById('rmode-pick').classList.toggle('active',m==='pick');
+  if(m==='read') newResQuestion(); else newPickQuestion();
+}
+
+function formatOhm(v){
+  if(v>=1e6) return (v/1e6).toFixed(v%1e6?1:0)+'M';
+  if(v>=1e3) return (v/1e3).toFixed(v%1e3?1:0)+'k';
+  return v+'';
+}
+
+function newResQuestion(){
+  resBands=[];
+  // Pick 3 digit bands (b1,b2) and multiplier, plus tolerance
+  const b1=DIG_COLORS.filter(c=>c.val>0)[Math.floor(Math.random()*9)];
+  const b2=DIG_COLORS[Math.floor(Math.random()*10)];
+  const mults=[{name:'Brown',hex:'#8B4513',mult:10},{name:'Red',hex:'#dc2626',mult:100},{name:'Orange',hex:'#f97316',mult:1000},{name:'Yellow',hex:'#eab308',mult:10000},{name:'Green',hex:'#16a34a',mult:100000}];
+  const b3=mults[Math.floor(Math.random()*mults.length)];
+  const b4=TOL_COLORS[Math.floor(Math.random()*TOL_COLORS.length)];
+  curResBandData=[b1,b2,b3,b4];
+  curResValue=(b1.val*10+b2.val)*b3.mult;
+  // Update SVG bands
+  ['rb1','rb2','rb3','rb4'].forEach((id,i)=>{
+    document.getElementById(id).setAttribute('fill',curResBandData[i].hex);
+  });
+  document.getElementById('res-answer-display').textContent='???';
+  document.getElementById('res-fb-read').textContent='';
+  document.getElementById('res-fb-read').className='res-feedback';
+  clearResBands();
+  buildReadPalette();
+}
+
+function buildReadPalette(){
+  // Show digit colors for bands 1-3, tol colors for band 4
+  const c=document.getElementById('res-palette-read');
+  c.innerHTML=DIG_COLORS.map(col=>`
+    <div class="color-swatch" onclick="pickReadBand('${col.name}')" style="background:${col.hex}" data-cname="${col.name}">
+      <div class="color-dot" style="background:${col.hex};border:1px solid rgba(255,255,255,.2)"></div>
+      <span>${col.name}</span>
+    </div>`).join('')+
+    MULT_COLORS.filter(c=>c.name!=='Black'&&c.name!=='White').slice(0,6).map(col=>`
+    <div class="color-swatch" style="background:${col.hex}" data-cname="${col.name}">
+      <div class="color-dot" style="background:${col.hex};border:1px solid rgba(255,255,255,.2)"></div>
+      <span>${col.name}</span>
+    </div>`).join('');
+}
+
+function clearResBands(){
+  resBands=[];
+  [1,2,3,4].forEach(i=>{const s=document.getElementById('rbs-'+i);if(s){s.style.background='transparent';s.classList.remove('filled');}});
+}
+
+function pickReadBand(name){
+  if(resBands.length>=4) return;
+  const col=RCOLORS.find(c=>c.name===name);
+  if(!col) return;
+  resBands.push(col);
+  const slot=document.getElementById('rbs-'+(resBands.length));
+  if(slot){slot.style.background=col.hex;slot.style.borderColor=col.hex;slot.classList.add('filled');}
+}
+
+function checkResRead(){
+  if(resBands.length<4){document.getElementById('res-fb-read').textContent='Pick all 4 bands first!';document.getElementById('res-fb-read').className='res-feedback bad';return;}
+  resTotal++;document.getElementById('res-total').textContent=resTotal;
+  // Check if bands match
+  const match=resBands.every((b,i)=>b.name===curResBandData[i].name);
+  document.getElementById('res-answer-display').textContent=formatOhm(curResValue);
+  const fb=document.getElementById('res-fb-read');
+  if(match){fb.textContent=`✓ Correct! ${formatOhm(curResValue)} Ω`;fb.className='res-feedback ok';resCorrect++;document.getElementById('res-correct').textContent=resCorrect;addXP(20);}
+  else{fb.textContent=`✗ Bands: ${curResBandData.map(b=>b.name).join(' · ')} = ${formatOhm(curResValue)} Ω`;fb.className='res-feedback bad';resetStreak();}
+  setTimeout(newResQuestion,2000);
+}
+
+function newPickQuestion(){
+  pickStep=0;
+  const vals=[100,220,330,470,1000,2200,4700,10000,47000,100000];
+  const target=vals[Math.floor(Math.random()*vals.length)];
+  document.getElementById('res-pick-val').textContent=formatOhm(target);
+  // Compute correct bands
+  const hundreds=Math.floor(target/100);
+  const tens=Math.floor((target%100)/10);
+  // simplified: just show value and let user pick mult
+  const b1=DIG_COLORS.find(c=>c.val===Math.floor(target/(Math.pow(10,Math.floor(Math.log10(target))))%10));
+  // Just generate a challenge: pick the multiplier color
+  const mult=Math.pow(10,Math.floor(Math.log10(target))-1);
+  const multColor=MULT_COLORS.find(c=>Math.abs(c.mult-mult)<0.001)||RCOLORS[1];
+  pickBandData={target,multColor};
+  document.getElementById('res-pick-prompt').textContent='Select the MULTIPLIER band color';
+  document.getElementById('res-fb-pick').textContent='';
+  document.getElementById('res-fb-pick').className='res-feedback';
+  buildPickPalette();
+}
+
+function buildPickPalette(){
+  const c=document.getElementById('res-palette-pick');
+  const opts=MULT_COLORS.filter(c=>c.mult>=1&&c.mult<=1e5);
+  c.innerHTML=opts.map(col=>`
+    <div class="color-swatch" onclick="answerPick('${col.name}')" style="background:${col.hex}">
+      <div class="color-dot" style="background:${col.hex};border:1px solid rgba(255,255,255,.2)"></div>
+      <span style="font-size:.5rem">${col.name}<br>×${col.mult>=1000?col.mult/1000+'k':col.mult}</span>
+    </div>`).join('');
+}
+
+function answerPick(name){
+  resTotal++;document.getElementById('res-total').textContent=resTotal;
+  const fb=document.getElementById('res-fb-pick');
+  const swatches=document.querySelectorAll('#res-palette-pick .color-swatch');
+  swatches.forEach(s=>{ const t=s.querySelector('span').textContent.split('\n')[0]; if(t===name){s.classList.add(name===pickBandData.multColor.name?'correct-pick':'wrong-pick');}if(t===pickBandData.multColor.name)s.classList.add('correct-pick');});
+  if(name===pickBandData.multColor.name){fb.textContent=`✓ Correct! ${pickBandData.multColor.name} = ×${pickBandData.multColor.mult}`;fb.className='res-feedback ok';resCorrect++;document.getElementById('res-correct').textContent=resCorrect;addXP(20);}
+  else{fb.textContent=`✗ Answer: ${pickBandData.multColor.name} (×${pickBandData.multColor.mult})`;fb.className='res-feedback bad';resetStreak();}
+  document.querySelectorAll('#res-palette-pick .color-swatch').forEach(s=>s.style.pointerEvents='none');
+  setTimeout(newPickQuestion,2000);
+}
+
+function buildResReference(){
+  document.getElementById('res-ref').innerHTML=`
+    <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:.65rem">
+      <thead><tr><th style="padding:.4rem;border-bottom:1px solid var(--border);color:var(--muted);text-align:left">COLOR</th><th style="padding:.4rem;border-bottom:1px solid var(--border);color:var(--muted)">DIGIT</th><th style="padding:.4rem;border-bottom:1px solid var(--border);color:var(--muted)">MULT</th><th style="padding:.4rem;border-bottom:1px solid var(--border);color:var(--muted)">TOL</th></tr></thead>
+      <tbody>${RCOLORS.map(c=>`<tr><td style="padding:.35rem;"><span style="display:inline-block;width:14px;height:14px;background:${c.hex};border-radius:3px;border:1px solid rgba(255,255,255,.15);vertical-align:middle;margin-right:.4rem"></span>${c.name}</td><td style="padding:.35rem;text-align:center;color:var(--cyan)">${c.val??'—'}</td><td style="padding:.35rem;text-align:center;color:var(--em)">${c.mult>=1000?(c.mult>=1e6?(c.mult/1e6)+'M':(c.mult/1000)+'k'):c.mult}</td><td style="padding:.35rem;text-align:center;color:var(--am)">${c.tol??'—'}</td></tr>`).join('')}</tbody>
+    </table>`;
+}
+
+/* ══════════════════════════════════════════════
+   GAME 4 — OHM'S LAW CHALLENGE
+══════════════════════════════════════════════ */
+const OHM_TEMPLATES = [
+  {find:'V', gen:()=>{const I=+(Math.random()*9+1).toFixed(2),R=+(Math.random()*90+10).toFixed(0);return{given:{I:{v:I,u:'A'},R:{v:R,u:'Ω'}},ans:+(I*R).toFixed(2),unit:'V'}}},
+  {find:'I', gen:()=>{const V=+(Math.random()*90+10).toFixed(0),R=+(Math.random()*90+10).toFixed(0);return{given:{V:{v:V,u:'V'},R:{v:R,u:'Ω'}},ans:+(V/R).toFixed(3),unit:'A'}}},
+  {find:'R', gen:()=>{const V=+(Math.random()*90+10).toFixed(0),I=+(Math.random()*9+1).toFixed(2);return{given:{V:{v:V,u:'V'},I:{v:I,u:'A'}},ans:+(V/I).toFixed(2),unit:'Ω'}}},
+];
+let ohmRound=0,ohmScore=0,ohmQ={};
+
+function initOhm(){
+  ohmRound=0;ohmScore=0;
+  document.getElementById('ohm-game').style.display='block';
+  document.getElementById('ohm-result').style.display='none';
+  buildOhmDots();nextOhmQ();
+}
+
+function buildOhmDots(){
+  document.getElementById('ohm-dots').innerHTML=[...Array(10)].map((_,i)=>`<div class="ohm-dot ${i===0?'active':''}" id="odot-${i}"></div>`).join('');
+}
+
+function nextOhmQ(){
+  if(ohmRound>=10){showOhmResult();return;}
+  // Update dots
+  [...Array(10)].forEach((_,i)=>{
+    const d=document.getElementById('odot-'+i);
+    if(!d)return;
+    d.className='ohm-dot'+(i<ohmRound?' done':i===ohmRound?' active':'');
+  });
+  const tpl=OHM_TEMPLATES[ohmRound%3];
+  ohmQ=tpl.gen();
+  ohmQ.find=tpl.find;
+  // Render given values
+  document.getElementById('ohm-given').innerHTML=Object.entries(ohmQ.given).map(([k,v])=>`
+    <div class="ohm-given-item"><div class="ohm-given-lbl">${k}</div><div class="ohm-given-val">${v.v} ${v.u}</div></div>`).join('');
+  document.getElementById('ohm-find').textContent=`Find: ${ohmQ.find} = ?`;
+  document.getElementById('ohm-unit').textContent=ohmQ.unit;
+  document.getElementById('ohm-input').value='';
+  document.getElementById('ohm-fb').textContent='';
+  document.getElementById('ohm-fb').className='ohm-feedback';
+  document.getElementById('ohm-input').focus();
+}
+
+function checkOhm(){
+  const val=parseFloat(document.getElementById('ohm-input').value);
+  if(isNaN(val)){document.getElementById('ohm-fb').textContent='Enter a number!';document.getElementById('ohm-fb').className='ohm-feedback bad';return;}
+  const correct=Math.abs(val-ohmQ.ans)/ohmQ.ans<0.05; // 5% tolerance
+  const fb=document.getElementById('ohm-fb');
+  if(correct){fb.textContent=`✓ Correct! ${ohmQ.find} = ${ohmQ.ans} ${ohmQ.unit}`;fb.className='ohm-feedback ok';ohmScore++;addXP(15);}
+  else{fb.textContent=`✗ Answer: ${ohmQ.find} = ${ohmQ.ans} ${ohmQ.unit}`;fb.className='ohm-feedback bad';resetStreak();}
+  ohmRound++;
+  setTimeout(nextOhmQ,1500);
+}
+
+function skipOhm(){
+  document.getElementById('ohm-fb').textContent=`Skipped. Answer: ${ohmQ.find} = ${ohmQ.ans} ${ohmQ.unit}`;
+  document.getElementById('ohm-fb').className='ohm-feedback bad';
+  resetStreak();ohmRound++;setTimeout(nextOhmQ,1200);
+}
+
+document.getElementById('ohm-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkOhm();});
+
+function showOhmResult(){
+  document.getElementById('ohm-game').style.display='none';
+  document.getElementById('ohm-result').style.display='block';
+  const pct=Math.round(ohmScore/10*100);
+  document.getElementById('ohm-result-score').textContent=ohmScore+'/10';
+  document.getElementById('ohm-emoji').textContent=pct>=80?'🏆':pct>=50?'⚡':'🔧';
+  document.getElementById('ohm-result-title').textContent=pct>=80?'Circuit Master!':pct>=50?'Good Engineer!':'Keep Practicing!';
+  document.getElementById('ohm-result-sub').textContent=`${pct}% accuracy · V = I × R never fails`;
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+initGates();
+initMemory();
+newResQuestion();
+buildResReference();
+initOhm();
+</script>
+</body>
+</html>
