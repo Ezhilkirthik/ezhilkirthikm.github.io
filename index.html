@@ -61,57 +61,11 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 .o2{width:350px;height:350px;background:rgba(0,255,163,.06);bottom:0;left:10%;animation-duration:11s;animation-delay:-3s}
 .o3{width:250px;height:250px;background:rgba(255,179,71,.05);top:40%;left:40%;animation-duration:7s;animation-delay:-5s}
 @keyframes ofloat{100%{transform:translateY(-40px) scale(1.08)}}
-.hinner{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap:3rem;
-}
-.heyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:.6rem;
-  padding:.5rem 1.2rem;
+.hinner{position:relative;z-index:1;max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:center}
 
-  border:1px solid rgba(0,255,200,0.25);
-  border-radius:100px;
-
-  margin-bottom:2rem;
-
-  font-family:var(--font-m);
-  font-size:.72rem;
-  letter-spacing:.14em;
-
-  color:#00ffc8;                               /* cleaner neon */
-  background:rgba(0,255,200,0.06);             /* softer bg */
-
-  backdrop-filter: blur(8px);                  /* glass effect */
-  box-shadow:0 0 12px rgba(0,255,200,0.15);    /* subtle glow */
-
-  opacity:0;
-  animation:fup .8s .2s var(--expo) forwards;
-}
-  
-.edot{
-  width:10px;
-  height:10px;
-  background:#00ffc8;
-  border-radius:50%;
-  position:relative;
-}
-
-.edot::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  border:2px solid #00ffc8;
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);opacity:1;}
-  100%{transform:scale(2);opacity:0;}
-}
+.heyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border:1px solid rgba(0,245,255,.25);border-radius:100px;margin-bottom:2rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-emerald);background:rgba(0,255,163,.05);opacity:0;animation:fup .8s .2s var(--expo) forwards}
+.edot{width:6px;height:6px;background:var(--c-emerald);border-radius:50%;animation:pdot 2s infinite}
+@keyframes pdot{50%{opacity:.4;transform:scale(.7)}}
 
 /* WAVE NAME */
 .hname{font-size:clamp(3.5rem,7vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.03em;color:var(--c-white);opacity:0;animation:fup .9s .35s var(--expo) forwards;margin-bottom:.5rem}
@@ -201,7 +155,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 .agrid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
 .asticky{position:sticky;top:7rem}
 .asub{font-family:var(--font-s);font-style:italic;font-size:1.5rem;color:var(--c-muted);margin-top:1rem;margin-bottom:3rem}
-.srow{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:1.5rem;margin-top:3rem}
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
 .scard{padding:1.5rem 1rem;border:1px solid var(--c-border);border-radius:1rem;text-align:center;background:var(--c-surface);transition:border-color .3s,transform .3s var(--bounce);cursor:pointer;position:relative;overflow:hidden}
 .scard::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,245,255,.1),transparent 70%);opacity:0;transition:opacity .3s}
 .scard:hover{border-color:rgba(0,245,255,.4);transform:translateY(-6px) scale(1.04)}.scard:hover::after{opacity:1}
@@ -234,9 +188,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 /* PROJECTS */
 #projects{background:var(--c-bg);border-top:1px solid var(--c-border)}
 .phdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem}
-.pgrid{
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
 .pcard{background:var(--c-surface);border:1px solid var(--c-border);border-radius:1.5rem;overflow:hidden;transition:border-color .3s;cursor:pointer;position:relative;will-change:transform}
 .pcard:hover{border-color:rgba(0,245,255,.2)}
 .ptop{height:3px}.pbody{padding:2rem}
@@ -269,9 +221,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 
 /* SKILLS */
 #skills{background:var(--c-surface);border-top:1px solid var(--c-border)}
-.skgrid{
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
+.skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;margin-top:4rem}
 .sgtitle{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
 .sgname{font-size:.72rem;font-weight:700;letter-spacing:.2em}.sgsub{font-size:.65rem;color:var(--c-muted);letter-spacing:.1em;margin-top:.1rem}
 .spills{display:flex;flex-wrap:wrap;gap:.5rem}
@@ -377,19 +327,11 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 
 /* RESPONSIVE */
 @media(max-width:900px){
-  nav{
-    padding:1rem;
-  }
-}.nlinks{display:none}
+  nav{padding:1.2rem 1.5rem}.nlinks{display:none}
   .hinner{grid-template-columns:1fr}.hvisual{display:none}
-  .agrid{
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
+  .agrid{grid-template-columns:1fr}.asticky{position:static}
   .pgrid{grid-template-columns:1fr}.skgrid{grid-template-columns:1fr}
-  .bgrid{grid-template-columns:1fr}
-  .achgrid{
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
+  .bgrid{grid-template-columns:1fr}.achgrid{grid-template-columns:1fr}
   .ctop{flex-direction:column;align-items:flex-start;gap:2rem}
   .cbot{flex-direction:column;gap:1.5rem;text-align:center}
   .sec{padding:5rem 1.5rem}
@@ -404,6 +346,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 <!-- LOADER -->
 <div id="loader">
   <div class="llogo" data-text="EK">Clock Signal Detected...</div>
+  <div class="lsub">EZHILKIRTHIK M</div>
   <div class="ltrack"><div class="lfill"></div></div>
   <div class="ltxt" id="ltxt">INITIALIZING...</div>
 </div>
@@ -458,6 +401,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
       </div>
     </div>
   </div>
+  <div class="scind">SCROLL DOWN<div class="scline"></div></div>
 </section>
 
 <!-- ABOUT -->
@@ -504,7 +448,7 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
 <section id="projects" class="sec">
   <div class="si">
     <div class="phdr">
-      <div><div class="slbl rv">03 — PROJECTS</div><h2 class="stitle rv">Project <span class="ac">Work</span></h2></div>
+      <div><div class="slbl rv">03 — PROJECTS</div><h2 class="stitle rv">Featured <span class="ac">Work</span></h2></div>
       <a href="https://github.com/Ezhilkirthik" target="_blank" class="valink rv">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     <div class="pgrid">
@@ -553,10 +497,10 @@ nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom
   <div class="si">
     <div style="text-align:center;margin-bottom:3rem">
       <div class="slbl rv" style="display:inline-block">05 — RESEARCH</div>
-      <h2 class="stitle rv" style="margin-top:1rem">Research <span class="ac">Publication</span></h2>
+      <h2 class="stitle rv" style="margin-top:1rem">IEEE <span class="ac">Publication</span></h2>
     </div>
     <div class="pubcard rv">
-      <div class="plbl"><i class="fa-solid fa-book"></i>PUBLICATION</div>
+      <div class="plbl"><i class="fa-solid fa-book"></i>IEEE PUBLICATION</div>
       <h3 class="ptit">Power and Area Optimized FFT Architecture Through Multiplier-Level Hardware Design</h3>
       <p class="pdsc">Accepted and to be published with IEEE. Presents a hardware-efficient FFT implementation using optimized multiplier architectures on FPGA.</p>
       <div class="ptags2"><span class="ptag2">FPGA</span><span class="ptag2">RTL OPTIMIZATION</span><span class="ptag2">VLSI</span><span class="ptag2">DSP</span></div>
