@@ -1,665 +1,761 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EZHILKIRTHIK M — Electronics Engineer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --c-bg:#030508;--c-surface:#080d14;--c-border:rgba(0,245,255,0.12);
-  --c-cyan:#00f5ff;--c-emerald:#00ffa3;--c-amber:#ffb347;--c-pink:#ff6bff;
-  --c-text:#d4e0f0;--c-muted:#5a7088;--c-white:#f0f8ff;
-  --font-d:'Syne',sans-serif;--font-m:'DM Mono',monospace;--font-s:'Instrument Serif',serif;
-  --expo:cubic-bezier(0.19,1,0.22,1);--bounce:cubic-bezier(0.34,1.56,0.64,1);
-}
-html{scroll-behavior:smooth}
-body{background:var(--c-bg);color:var(--c-text);font-family:var(--font-d);overflow-x:hidden;cursor:none}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--c-bg)}::-webkit-scrollbar-thumb{background:var(--c-cyan);border-radius:3px}
-::selection{background:var(--c-cyan);color:#000}
-
-/* CURSOR */
-#cd{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;background:var(--c-cyan);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:transform .08s,background .2s,width .2s,height .2s;box-shadow:0 0 12px var(--c-cyan),0 0 24px var(--c-cyan)}
-#cr{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border:1.5px solid rgba(0,245,255,.5);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
-#cl{position:fixed;top:0;left:0;z-index:9997;font-family:var(--font-m);font-size:.6rem;letter-spacing:.1em;color:var(--c-cyan);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;padding:.2rem .5rem;background:rgba(3,5,8,.85);border-radius:4px;transform:translate(20px,20px)}
-body.ch #cd{width:12px;height:12px;background:var(--c-emerald)}
-body.ch #cr{width:56px;height:56px;border-color:var(--c-emerald)}
-body.cc #cd{transform:translate(-50%,-50%) scale(.5)}
-body.cf #cr{border-color:var(--c-pink);animation:rspin .5s linear infinite}
-@keyframes rspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-
-/* NOISE */
-#noise{position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
-
-/* PROGRESS */
-#sp{position:fixed;top:0;left:0;z-index:9000;height:2px;width:0%;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));box-shadow:0 0 8px var(--c-cyan);transition:width .1s linear}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:800;padding:1.4rem 3rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
-nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--c-border)}
-.nlogo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
-.nicon{width:38px;height:38px;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#000;font-size:1rem;box-shadow:0 0 20px rgba(0,245,255,.4);transition:transform .3s var(--bounce),box-shadow .3s}
-.nicon:hover{transform:rotate(15deg) scale(1.1);box-shadow:0 0 32px rgba(0,245,255,.7)}
-.ntxt{font-size:1.1rem;font-weight:800;letter-spacing:.15em;color:var(--c-white)}
-.nlinks{display:flex;align-items:center;gap:2.5rem}
-.nlink{font-size:.7rem;font-weight:500;letter-spacing:.2em;color:var(--c-muted);text-decoration:none;position:relative;transition:color .3s}
-.nlink::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--c-cyan);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--expo)}
-.nlink:hover{color:var(--c-white)}.nlink:hover::after,.nlink.active::after{transform:scaleX(1)}
-.nlink.active{color:var(--c-cyan)}
-.ncta{font-size:.7rem;font-weight:600;letter-spacing:.15em;color:#000;text-decoration:none;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));padding:.6rem 1.4rem;border-radius:100px;transition:transform .3s var(--bounce),box-shadow .3s}
-.ncta:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 24px rgba(0,245,255,.35)}
-
-/* HERO */
-#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:6rem 3rem 3rem}
-.gridbg{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:48px 48px;animation:gdrift 30s linear infinite;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)}
-@keyframes gdrift{100%{background-position:48px 48px}}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:ofloat 8s ease-in-out infinite alternate}
-.o1{width:500px;height:500px;background:rgba(0,245,255,.07);top:-100px;right:-100px;animation-duration:9s}
-.o2{width:350px;height:350px;background:rgba(0,255,163,.06);bottom:0;left:10%;animation-duration:11s;animation-delay:-3s}
-.o3{width:250px;height:250px;background:rgba(255,179,71,.05);top:40%;left:40%;animation-duration:7s;animation-delay:-5s}
-@keyframes ofloat{100%{transform:translateY(-40px) scale(1.08)}}
-.hinner{position:relative;z-index:1;max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:center}
-
-.heyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border:1px solid rgba(0,245,255,.25);border-radius:100px;margin-bottom:2rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-emerald);background:rgba(0,255,163,.05);opacity:0;animation:fup .8s .2s var(--expo) forwards}
-.edot{width:6px;height:6px;background:var(--c-emerald);border-radius:50%;animation:pdot 2s infinite}
-@keyframes pdot{50%{opacity:.4;transform:scale(.7)}}
-
-/* WAVE NAME */
-.hname{font-size:clamp(3.5rem,7vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.03em;color:var(--c-white);opacity:0;animation:fup .9s .35s var(--expo) forwards;margin-bottom:.5rem}
-.wc{display:inline-block;transition:transform .2s var(--bounce),color .2s,text-shadow .2s}
-.wc:hover{transform:translateY(-14px) scale(1.18);color:var(--c-cyan);text-shadow:0 0 20px var(--c-cyan)}
-
-.hbar{width:0;height:3px;margin:1.5rem 0;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));border-radius:2px;animation:ebar .8s .7s var(--expo) forwards}
-@keyframes ebar{to{width:100px}}
-.hrole{font-size:1.4rem;font-weight:400;color:var(--c-muted);margin-bottom:1.5rem;font-family:var(--font-s);font-style:italic;opacity:0;animation:fup .8s .6s var(--expo) forwards}
-.hdesc{font-size:1rem;line-height:1.8;color:var(--c-muted);max-width:500px;margin-bottom:2.5rem;opacity:0;animation:fup .8s .75s var(--expo) forwards}
-.hbtns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fup .8s .9s var(--expo) forwards}
-.bp{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));color:#000;font-weight:700;font-size:.78rem;letter-spacing:.12em;border-radius:100px;text-decoration:none;position:relative;overflow:hidden;transition:transform .3s var(--bounce),box-shadow .3s}
-.bp::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--c-emerald),var(--c-cyan));opacity:0;transition:opacity .3s}
-.bp:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(0,245,255,.35)}.bp:hover::before{opacity:1}
-.bp span,.bp i{position:relative;z-index:1}
-.bs{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:.6rem;
-  padding:.85rem 2rem;
-
-  background: rgba(255,255,255,0.05);        
-  border:1px solid rgba(255,255,255,.15);
-
-  color:#ccc;                             
-  font-weight:600;
-  font-size:.78rem;
-  letter-spacing:.12em;
-
-  border-radius:100px;
-  text-decoration:none;
-
-  backdrop-filter: blur(10px);
-
-  transition: all .3s var(--bounce);
-}
-.bs:hover{
-  background: rgba(239,68,68,0.12);
-  color:#ef4444;
-  border-color:#ef4444;
-
-  box-shadow:0 0 10px rgba(239,68,68,0.3);
-}
-.hmeta{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);opacity:0;animation:fup .8s 1.05s var(--expo) forwards}
-.hmi{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--c-muted)}.hmi i{color:var(--c-cyan)}
-
-/* HERO VISUAL */
-.hvisual{position:relative;opacity:0;animation:fleft .9s .5s var(--expo) forwards}
-.hframe{position:relative;width:100%;aspect-ratio:3/4;border-radius:2rem;overflow:hidden;border:1px solid rgba(0,245,255,.2);box-shadow:0 0 60px rgba(0,245,255,.08);transition:box-shadow .5s}
-.hframe:hover{box-shadow:0 0 80px rgba(0,245,255,.2)}
-.hframe img{width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(.15) brightness(.9);transition:filter .5s,transform .5s}
-.hframe:hover img{filter:grayscale(0) brightness(1);transform:scale(1.02)}
-.hovlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(3,5,8,.8) 100%)}
-.hscan{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent,transparent 3px,rgba(0,245,255,.03) 3px,rgba(0,245,255,.03) 4px);pointer-events:none}
-.fbadge{position:absolute;display:flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;background:rgba(8,13,20,.9);backdrop-filter:blur(10px);border-radius:100px;font-family:var(--font-m);font-size:.7rem;letter-spacing:.1em;animation:bfloat 4s ease-in-out infinite alternate;cursor:pointer;transition:transform .2s var(--bounce)}
-.fbadge:hover{transform:scale(1.15) !important}
-.fb1{top:-1rem;right:-1.5rem;border:1px solid rgba(0,255,163,.3);color:var(--c-emerald);animation-delay:0s}
-.fb2{bottom:2rem;left:-2rem;border:1px solid rgba(0,245,255,.3);color:var(--c-cyan);animation-delay:-2s}
-.fb3{top:45%;right:-2rem;border:1px solid rgba(255,179,71,.3);color:var(--c-amber);animation-delay:-1s}
-@keyframes bfloat{100%{transform:translateY(-8px)}}
-.rd{position:absolute;border-radius:50%;border:1px solid;pointer-events:none;transition:transform 1s var(--expo)}
-.r1{width:110%;height:110%;top:-5%;left:-5%;border-color:rgba(0,245,255,.08);transform:rotate(-8deg)}
-.r2{width:125%;height:125%;top:-12%;left:-12%;border-color:rgba(0,255,163,.05);transform:rotate(12deg)}
-.hvisual:hover .r1{transform:rotate(8deg)}.hvisual:hover .r2{transform:rotate(-12deg)}
-
-.scind{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--font-m);font-size:.6rem;letter-spacing:.25em;color:var(--c-muted);animation:fin 1s 1.5s both}
-.scline{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--c-cyan),transparent);animation:spulse 2s infinite}
-@keyframes spulse{50%{opacity:1}0%,100%{opacity:.3}}
-
-/* SECTIONS */
-.sec{padding:8rem 3rem}.si{max-width:1300px;margin:0 auto}
-.slbl{display:inline-block;font-family:var(--font-m);font-size:.65rem;letter-spacing:.25em;color:var(--c-cyan);padding:.35rem 1rem;border:1px solid rgba(0,245,255,.2);border-radius:100px;margin-bottom:1.5rem}
-.stitle{font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--c-white);margin-bottom:1rem}
-.stitle .ac{color:transparent;-webkit-text-stroke:1px rgba(0,245,255,.4)}
-
-/* ANIMATIONS */
-@keyframes fup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fleft{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-@keyframes fin{from{opacity:0}to{opacity:1}}
-.rv{opacity:0;transform:translateY(40px);transition:opacity .9s var(--expo),transform .9s var(--expo)}
-.rv.vis{opacity:1;transform:translateY(0)}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-
-/* ABOUT */
-#about{background:var(--c-bg);border-top:1px solid var(--c-border)}
-.agrid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
-.asticky{position:sticky;top:7rem}
-.asub{font-family:var(--font-s);font-style:italic;font-size:1.5rem;color:var(--c-muted);margin-top:1rem;margin-bottom:3rem}
-.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
-.scard{padding:1.5rem 1rem;border:1px solid var(--c-border);border-radius:1rem;text-align:center;background:var(--c-surface);transition:border-color .3s,transform .3s var(--bounce);cursor:pointer;position:relative;overflow:hidden}
-.scard::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,245,255,.1),transparent 70%);opacity:0;transition:opacity .3s}
-.scard:hover{border-color:rgba(0,245,255,.4);transform:translateY(-6px) scale(1.04)}.scard:hover::after{opacity:1}
-.snum{font-size:2rem;font-weight:800;color:var(--c-cyan);display:block}
-.slb{font-size:.65rem;letter-spacing:.15em;color:var(--c-muted);margin-top:.25rem;display:block}
-.afeats{display:flex;flex-direction:column;gap:2rem}
-.fcard{display:flex;gap:1.5rem;align-items:flex-start;padding:1.75rem;border:1px solid var(--c-border);border-radius:1.25rem;background:var(--c-surface);transition:border-color .3s,transform .4s var(--expo),box-shadow .4s;position:relative;overflow:hidden}
-.fcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,245,255,.04),transparent);opacity:0;transition:opacity .4s}
-.fcard:hover{border-color:rgba(0,245,255,.25);transform:translateX(6px);box-shadow:-4px 0 24px rgba(0,245,255,.05)}.fcard:hover::before{opacity:1}
-.fico{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:transform .3s var(--bounce)}
-.fcard:hover .fico{transform:rotate(-10deg) scale(1.15)}
-.fico.cy{background:rgba(0,245,255,.1);color:var(--c-cyan)}.fico.em{background:rgba(0,255,163,.1);color:var(--c-emerald)}.fico.am{background:rgba(255,179,71,.1);color:var(--c-amber)}
-.ftitle{font-size:.95rem;font-weight:700;color:var(--c-white);margin-bottom:.4rem}.fdesc{font-size:.85rem;line-height:1.7;color:var(--c-muted)}
-
-/* EXPERIENCE */
-#experience{background:var(--c-surface);border-top:1px solid var(--c-border)}
-.ecard{max-width:860px;padding:3rem;border:1px solid var(--c-border);border-radius:2rem;background:rgba(0,245,255,.02);position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
-.ecard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald))}
-.ecard:hover{border-color:rgba(0,245,255,.25);box-shadow:0 24px 64px rgba(0,245,255,.06)}
-.ehdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem}
-.ecomp{font-size:1.8rem;font-weight:800;color:var(--c-white)}.erole{font-size:.85rem;color:var(--c-emerald);font-family:var(--font-m);letter-spacing:.1em;margin-top:.3rem}
-.edate{font-family:var(--font-m);font-size:.7rem;padding:.5rem 1rem;border-radius:100px;background:var(--c-bg);color:var(--c-muted);border:1px solid var(--c-border);white-space:nowrap}
-.eitems{display:flex;flex-direction:column;gap:1rem}
-.eitem{display:flex;gap:1rem;align-items:flex-start;font-size:.9rem;color:var(--c-text)}
-.edot{width:5px;height:5px;background:var(--c-emerald);border-radius:50%;flex-shrink:0;margin-top:.5rem}
-.etags{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:2rem}
-.etag{font-size:.7rem;letter-spacing:.1em;padding:.35rem .9rem;border-radius:100px;background:var(--c-bg);color:var(--c-muted);border:1px solid var(--c-border);transition:color .2s,border-color .2s,transform .2s}
-.etag:hover{color:var(--c-cyan);border-color:rgba(0,245,255,.3);transform:translateY(-2px)}
-
-/* PROJECTS */
-#projects{background:var(--c-bg);border-top:1px solid var(--c-border)}
-.phdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.pcard{background:var(--c-surface);border:1px solid var(--c-border);border-radius:1.5rem;overflow:hidden;transition:border-color .3s;cursor:pointer;position:relative;will-change:transform}
-.pcard:hover{border-color:rgba(0,245,255,.2)}
-.ptop{height:3px}.pbody{padding:2rem}
-.picon{font-size:2rem;margin-bottom:1.2rem;display:block;transition:transform .4s var(--bounce)}
-.pcard:hover .picon{transform:scale(1.2) rotate(-5deg)}
-.pbadge{display:inline-block;font-family:var(--font-m);font-size:.6rem;letter-spacing:.15em;padding:.3rem .7rem;background:var(--c-bg);border-radius:100px;float:right;border:1px solid var(--c-border);color:var(--c-muted)}
-.ptitle{font-size:1rem;font-weight:700;color:var(--c-white);margin-bottom:.75rem;line-height:1.4;transition:color .3s}
-.pcard:hover .ptitle{color:var(--c-cyan)}
-.pdesc{font-size:.82rem;line-height:1.75;color:var(--c-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.pfooter{padding:1rem 2rem;border-top:1px solid var(--c-border);display:flex;align-items:center}
-.plink{font-family:var(--font-m);font-size:.68rem;letter-spacing:.1em;color:var(--c-emerald);display:flex;align-items:center;gap:.4rem;transition:gap .2s}
-.pcard:hover .plink{gap:.7rem}
-
-/* MODAL */
-.moverlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);backdrop-filter:blur(0px);display:flex;align-items:center;justify-content:center;padding:1.5rem;pointer-events:none;transition:background .4s,backdrop-filter .4s}
-.moverlay.open{background:rgba(0,0,0,.85);backdrop-filter:blur(16px);pointer-events:all}
-.mbox{max-width:680px;width:100%;background:#0a0f1a;border:1px solid rgba(0,245,255,.2);border-radius:2rem;overflow:hidden;transform:scale(.9) translateY(20px);opacity:0;transition:transform .4s var(--expo),opacity .4s}
-.moverlay.open .mbox{transform:scale(1) translateY(0);opacity:1}
-.macc{height:3px}.mcont{padding:2.5rem}
-.mclose{display:flex;justify-content:flex-end;margin-bottom:1.5rem}
-.mclose button{width:36px;height:36px;border-radius:50%;background:var(--c-bg);border:1px solid var(--c-border);color:var(--c-muted);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:none;transition:color .2s,transform .2s}
-.mclose button:hover{color:var(--c-white);transform:rotate(90deg)}
-.mtitle{font-size:1.6rem;font-weight:800;color:var(--c-white);margin-bottom:1.25rem;line-height:1.3}
-.mdesc{font-size:.9rem;line-height:1.8;color:var(--c-muted);margin-bottom:1.75rem}
-.mlist{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
-.mli{display:flex;gap:.75rem;align-items:flex-start;font-size:.88rem;color:var(--c-text)}
-.mlid{width:5px;height:5px;background:var(--c-emerald);border-radius:50%;flex-shrink:0;margin-top:.45rem}
-.mhl{background:rgba(0,255,163,.05);border:1px solid rgba(0,255,163,.15);border-radius:1rem;padding:1rem 1.5rem;margin-bottom:2rem;font-family:var(--font-m);font-size:.8rem;color:var(--c-emerald);text-align:center;letter-spacing:.08em}
-.macts{display:flex;gap:1rem}
-
-/* SKILLS */
-#skills{background:var(--c-surface);border-top:1px solid var(--c-border)}
-.skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;margin-top:4rem}
-.sgtitle{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
-.sgname{font-size:.72rem;font-weight:700;letter-spacing:.2em}.sgsub{font-size:.65rem;color:var(--c-muted);letter-spacing:.1em;margin-top:.1rem}
-.spills{display:flex;flex-wrap:wrap;gap:.5rem}
-.spill{font-size:.75rem;padding:.4rem 1rem;background:var(--c-bg);border:1px solid var(--c-border);border-radius:100px;color:var(--c-muted);transition:color .25s,border-color .25s,transform .25s var(--bounce),background .25s,box-shadow .25s;cursor:pointer;user-select:none}
-.spill:hover{color:var(--c-white);border-color:rgba(0,245,255,.3);transform:translateY(-3px) scale(1.05);background:rgba(0,245,255,.06);box-shadow:0 6px 20px rgba(0,245,255,.12)}
-.spill.hl{border-color:rgba(0,245,255,.25);color:var(--c-cyan)}
-.spill.popped{animation:ppop .5s var(--bounce)}
-@keyframes ppop{0%{transform:scale(1)}40%{transform:scale(1.4) rotate(-3deg)}70%{transform:scale(.9)}100%{transform:scale(1)}}
-@keyframes pfloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-45px);opacity:0}}
-
-.prow{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--c-border)}
-.ptitle2{font-size:.72rem;font-weight:700;letter-spacing:.2em;color:var(--c-muted);margin-bottom:2rem}
-.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.bhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
-.blbl{font-size:.8rem;color:var(--c-text)}.bpct{font-family:var(--font-m);font-size:.72rem;color:var(--c-muted)}
-.btrack{height:3px;background:var(--c-bg);border-radius:2px;overflow:hidden}
-.bfill{height:100%;border-radius:2px;width:0;transition:width 1.2s var(--expo);background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));box-shadow:0 0 6px var(--c-cyan)}
-
-/* PUBLICATION */
-#publication{background:var(--c-bg);border-top:1px solid var(--c-border)}
-.pubcard{max-width:800px;margin:0 auto;padding:3.5rem;border:1px solid rgba(255,179,71,.15);border-radius:2rem;background:rgba(255,179,71,.02);text-align:center;position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
-.pubcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c-amber),transparent)}
-.pubcard:hover{border-color:rgba(255,179,71,.3);box-shadow:0 0 60px rgba(255,179,71,.05)}
-.plbl{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-amber);margin-bottom:1.5rem}
-.ptit{font-size:1.6rem;font-weight:700;color:var(--c-white);line-height:1.4;max-width:560px;margin:0 auto 1.25rem}
-.pdsc{font-size:.88rem;color:var(--c-muted);line-height:1.8;max-width:440px;margin:0 auto 2rem}
-.ptags2{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
-.ptag2{font-size:.7rem;padding:.4rem 1rem;background:var(--c-bg);border:1px solid rgba(255,179,71,.2);border-radius:100px;color:var(--c-amber);letter-spacing:.1em;transition:transform .2s var(--bounce)}
-.ptag2:hover{transform:translateY(-3px)}
-
-/* ACHIEVEMENTS */
-#achievements{background:var(--c-surface);border-top:1px solid var(--c-border)}
-.achgrid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:700px;margin-top:3rem}
-.achcard{padding:2.5rem;border:1px solid var(--c-border);border-radius:1.5rem;background:var(--c-bg);transition:border-color .3s,transform .4s var(--bounce),box-shadow .4s;position:relative;overflow:hidden;cursor:pointer}
-.achcard::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(0,245,255,.05),transparent 60%);opacity:0;transition:opacity .4s}
-.achcard:hover{border-color:rgba(0,245,255,.2);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.4)}.achcard:hover::before{opacity:1}
-.achemo{font-size:2.5rem;display:block;margin-bottom:1rem;transition:transform .3s var(--bounce)}
-.achcard:hover .achemo{transform:scale(1.3) rotate(10deg)}
-.acht{font-size:1rem;font-weight:700;color:var(--c-white);margin-bottom:.35rem}
-.achs{font-size:.8rem;color:var(--c-muted)}
-
-/* CONTACT */
-#contact{background:var(--c-bg);border-top:1px solid var(--c-border);padding:6rem 3rem}
-.cinner{max-width:1300px;margin:0 auto}
-.ctop{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:3rem;border-bottom:1px solid var(--c-border)}
-.chl{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.02em;color:var(--c-white)}
-.chl em{font-style:italic;font-family:var(--font-s);color:var(--c-cyan)}
-.clinks{display:flex;flex-direction:column;gap:.75rem}
-.clink{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--c-muted);text-decoration:none;transition:color .2s,gap .2s}
-.clink i{color:var(--c-cyan);width:18px}.clink:hover{color:var(--c-white);gap:1rem}
-.cbot{display:flex;justify-content:space-between;align-items:center;padding-top:2rem}
-.flogo{font-size:1.5rem;font-weight:800;letter-spacing:.05em;color:var(--c-white)}
-.fcopy{font-family:var(--font-m);font-size:.68rem;color:var(--c-muted);letter-spacing:.08em}
-.fsocs{display:flex;gap:1rem}
-.fsoc{width:36px;height:36px;border-radius:50%;background:var(--c-surface);border:1px solid var(--c-border);display:flex;align-items:center;justify-content:center;color:var(--c-muted);text-decoration:none;transition:color .2s,border-color .2s,transform .3s var(--bounce)}
-.fsoc:hover{color:var(--c-cyan);border-color:rgba(0,245,255,.3);transform:translateY(-3px)}
-
-/* LOADER */
-#loader{position:fixed;inset:0;z-index:10000;background:var(--c-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
-#loader.hidden{opacity:0;visibility:hidden}
-.llogo{font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--c-white);margin-bottom:.5rem;position:relative;animation:gm 8s infinite}
-.llogo::before,.llogo::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;background:var(--c-bg)}
-.llogo::before{left:2px;text-shadow:-2px 0 var(--c-cyan);animation:g1 8s infinite;clip-path:polygon(0 0,100% 0,100% 40%,0 40%)}
-.llogo::after{left:-2px;text-shadow:2px 0 var(--c-emerald);animation:g2 8s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)}
-@keyframes gm{0%,90%,100%{transform:none}92%{transform:skew(-2deg)}94%{transform:skew(2deg)}}
-@keyframes g1{0%,90%,100%{transform:none;opacity:0}91%{transform:translateX(-3px);opacity:1}93%{transform:translateX(3px);opacity:1}95%{opacity:0}}
-@keyframes g2{0%,90%,100%{transform:none;opacity:0}92%{transform:translateX(3px);opacity:1}94%{transform:translateX(-3px);opacity:1}96%{opacity:0}}
-.lsub{font-family:var(--font-m);font-size:.7rem;letter-spacing:.2em;color:var(--c-cyan);margin-bottom:2rem}
-.ltrack{width:200px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
-.lfill{height:100%;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));width:0;animation:lfill 1.2s var(--expo) forwards}
-@keyframes lfill{to{width:100%}}
-.ltxt{font-family:var(--font-m);font-size:.65rem;letter-spacing:.25em;color:var(--c-muted);margin-top:1rem}
-
-/* TERMINAL */
-#term{position:fixed;bottom:2rem;right:2rem;z-index:5000;width:420px;background:#000d0d;border:1px solid rgba(0,245,255,.3);border-radius:1rem;overflow:hidden;box-shadow:0 0 60px rgba(0,245,255,.15);transform:translateY(120%) scale(.9);opacity:0;transition:transform .4s var(--expo),opacity .4s;pointer-events:none}
-#term.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
-.thdr{background:rgba(0,245,255,.06);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,245,255,.1)}
-.tdots{display:flex;gap:.4rem}.tdot{width:10px;height:10px;border-radius:50%}.td-r{background:#ff5f57}.td-y{background:#febc2e}.td-g{background:#28c840}
-.ttitle{font-family:var(--font-m);font-size:.65rem;letter-spacing:.15em;color:var(--c-muted)}
-.tclose{cursor:none;color:var(--c-muted);transition:color .2s;font-size:.9rem;background:none;border:none}.tclose:hover{color:var(--c-white)}
-.tbody{padding:1rem;height:200px;overflow-y:auto;font-family:var(--font-m);font-size:.72rem;line-height:1.7}
-.tl{color:var(--c-emerald)}.tl.dim{color:var(--c-muted)}.tl.cy{color:var(--c-cyan)}.tl.am{color:var(--c-amber)}
-.tinrow{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-top:1px solid rgba(0,245,255,.1)}
-.tprompt{color:var(--c-cyan);font-family:var(--font-m);font-size:.72rem}
-#tinput{flex:1;background:transparent;border:none;outline:none;color:var(--c-white);font-family:var(--font-m);font-size:.72rem;cursor:none}
-
-/* TOOLTIP */
-.tip{position:relative}
-.tip .tt{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:#0a0f1a;border:1px solid rgba(0,245,255,.2);border-radius:.5rem;padding:.4rem .8rem;font-family:var(--font-m);font-size:.62rem;letter-spacing:.08em;color:var(--c-cyan);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;z-index:100}
-.tip .tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:rgba(0,245,255,.2)}
-.tip:hover .tt{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* EE HINT */
-.eehint{position:fixed;bottom:2rem;left:2rem;z-index:4000;font-family:var(--font-m);font-size:.6rem;letter-spacing:.15em;color:var(--c-muted);opacity:0;animation:fin 1s 5s forwards}
-
-/* HELPERS */
-.valink{font-family:var(--font-m);font-size:.72rem;letter-spacing:.15em;color:var(--c-cyan);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:gap .2s}
-.valink:hover{gap:.85rem}
-.gc{color:var(--c-cyan)}.ge{color:var(--c-emerald)}.ga{color:var(--c-amber)}
-.mag{transition:transform .3s var(--expo)}
-.tcur{display:inline-block;width:2px;height:1em;background:var(--c-cyan);margin-left:2px;animation:blink .8s infinite;vertical-align:middle}
-@keyframes blink{51%,100%{opacity:0}}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:1.2rem 1.5rem}.nlinks{display:none}
-  .hinner{grid-template-columns:1fr}.hvisual{display:none}
-  .agrid{grid-template-columns:1fr}.asticky{position:static}
-  .pgrid{grid-template-columns:1fr}.skgrid{grid-template-columns:1fr}
-  .bgrid{grid-template-columns:1fr}.achgrid{grid-template-columns:1fr}
-  .ctop{flex-direction:column;align-items:flex-start;gap:2rem}
-  .cbot{flex-direction:column;gap:1.5rem;text-align:center}
-  .sec{padding:5rem 1.5rem}
-  #term{width:calc(100% - 2rem);right:1rem;bottom:1rem}
-}
-</style>
-</head>
-<body>
-
-<canvas id="cc" style="position:fixed;inset:0;z-index:9000;pointer-events:none"></canvas>
-
-<!-- LOADER -->
-<div id="loader">
-  <div class="llogo" data-text="EK">Clock Signal Detected...</div>
-  <div class="lsub">EZHILKIRTHIK M</div>
-  <div class="ltrack"><div class="lfill"></div></div>
-  <div class="ltxt" id="ltxt">INITIALIZING...</div>
-</div>
-
-<div id="cd"></div><div id="cr"></div><div id="cl"></div>
-<div id="noise"></div>
-<div id="sp"></div>
-
-<!-- NAV -->
-<nav id="nav">
-  <a href="#hero" class="nlogo">
-    <div class="nicon"><i class="fa-solid fa-microchip"></i></div>
-    <span class="ntxt">EZHILKIRTHIK</span>
-  </a>
-  <div class="nlinks">
-    <a href="#about" class="nlink">ABOUT</a>
-    <a href="#experience" class="nlink">EXPERIENCE</a>
-    <a href="#projects" class="nlink">PROJECTS</a>
-    <a href="#skills" class="nlink">SKILLS</a>
-    <a href="#publication" class="nlink">RESEARCH</a>
-  </div>
-  <a href="https://github.com/Ezhilkirthik" target="_blank" class="ncta mag"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
-</nav>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="gridbg"></div>
-  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
-  <div class="hinner">
-    <div>
-      <div class="heyebrow"><span class="edot"></span>AVAILABLE FOR OPPORTUNITIES</div>
-      <h1 class="hname" id="hname"></h1>
-      <div class="hbar"></div>
-      <p class="hrole"><span id="ttext">Electronics Engineer</span><span class="tcur"></span></p>
-      <p class="hdesc">Motivated ECE undergraduate specializing in power electronics, FPGA design, and automotive embedded systems — building circuits that power the future.</p>
-      <div class="hbtns">
-        <a href="#projects" class="bp mag"><span>EXPLORE WORK</span><i class="fa-solid fa-arrow-right"></i></a>
-        <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="bs mag"><i class="fa-brands fa-linkedin"></i><span>LINKEDIN</span></a>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>EZHILKIRTHIK M — Electronics Engineer</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      <style>
+         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+         :root{
+         --c-bg:#030508;--c-surface:#080d14;--c-border:rgba(0,245,255,0.12);
+         --c-cyan:#00f5ff;--c-emerald:#00ffa3;--c-amber:#ffb347;--c-pink:#ff6bff;
+         --c-text:#d4e0f0;--c-muted:#5a7088;--c-white:#f0f8ff;
+         --font-d:'Syne',sans-serif;--font-m:'DM Mono',monospace;--font-s:'Instrument Serif',serif;
+         --expo:cubic-bezier(0.19,1,0.22,1);--bounce:cubic-bezier(0.34,1.56,0.64,1);
+         }
+         html{scroll-behavior:smooth}
+         body{background:var(--c-bg);color:var(--c-text);font-family:var(--font-d);overflow-x:hidden;cursor:none}
+         ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--c-bg)}::-webkit-scrollbar-thumb{background:var(--c-cyan);border-radius:3px}
+         ::selection{background:var(--c-cyan);color:#000}
+         /* CURSOR */
+         #cd{position:fixed;top:0;left:0;z-index:9999;width:8px;height:8px;background:var(--c-cyan);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:transform .08s,background .2s,width .2s,height .2s;box-shadow:0 0 12px var(--c-cyan),0 0 24px var(--c-cyan)}
+         #cr{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border:1.5px solid rgba(0,245,255,.5);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+         #cl{position:fixed;top:0;left:0;z-index:9997;font-family:var(--font-m);font-size:.6rem;letter-spacing:.1em;color:var(--c-cyan);pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;padding:.2rem .5rem;background:rgba(3,5,8,.85);border-radius:4px;transform:translate(20px,20px)}
+         body.ch #cd{width:12px;height:12px;background:var(--c-emerald)}
+         body.ch #cr{width:56px;height:56px;border-color:var(--c-emerald)}
+         body.cc #cd{transform:translate(-50%,-50%) scale(.5)}
+         body.cf #cr{border-color:var(--c-pink);animation:rspin .5s linear infinite}
+         @keyframes rspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+         /* NOISE */
+         #noise{position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px}
+         /* PROGRESS */
+         #sp{position:fixed;top:0;left:0;z-index:9000;height:2px;width:0%;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));box-shadow:0 0 8px var(--c-cyan);transition:width .1s linear}
+         /* NAV */
+         nav{position:fixed;top:0;left:0;right:0;z-index:800;padding:1.4rem 3rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
+         nav.scrolled{background:rgba(3,5,8,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--c-border)}
+         .nlogo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+         .nicon{width:38px;height:38px;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#000;font-size:1rem;box-shadow:0 0 20px rgba(0,245,255,.4);transition:transform .3s var(--bounce),box-shadow .3s}
+         .nicon:hover{transform:rotate(15deg) scale(1.1);box-shadow:0 0 32px rgba(0,245,255,.7)}
+         .ntxt{font-size:1.1rem;font-weight:800;letter-spacing:.15em;color:var(--c-white)}
+         .nlinks{display:flex;align-items:center;gap:2.5rem}
+         .nlink{font-size:.7rem;font-weight:500;letter-spacing:.2em;color:var(--c-muted);text-decoration:none;position:relative;transition:color .3s}
+         .nlink::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--c-cyan);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--expo)}
+         .nlink:hover{color:var(--c-white)}.nlink:hover::after,.nlink.active::after{transform:scaleX(1)}
+         .nlink.active{color:var(--c-cyan)}
+         .ncta{font-size:.7rem;font-weight:600;letter-spacing:.15em;color:#000;text-decoration:none;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));padding:.6rem 1.4rem;border-radius:100px;transition:transform .3s var(--bounce),box-shadow .3s}
+         .ncta:hover{transform:translateY(-2px) scale(1.05);box-shadow:0 8px 24px rgba(0,245,255,.35)}
+         /* HERO */
+         #hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:6rem 3rem 3rem}
+         .gridbg{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(0,245,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.04) 1px,transparent 1px);background-size:48px 48px;animation:gdrift 30s linear infinite;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)}
+         @keyframes gdrift{100%{background-position:48px 48px}}
+         .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;animation:ofloat 8s ease-in-out infinite alternate}
+         .o1{width:500px;height:500px;background:rgba(0,245,255,.07);top:-100px;right:-100px;animation-duration:9s}
+         .o2{width:350px;height:350px;background:rgba(0,255,163,.06);bottom:0;left:10%;animation-duration:11s;animation-delay:-3s}
+         .o3{width:250px;height:250px;background:rgba(255,179,71,.05);top:40%;left:40%;animation-duration:7s;animation-delay:-5s}
+         @keyframes ofloat{100%{transform:translateY(-40px) scale(1.08)}}
+         .hinner{position:relative;z-index:1;max-width:1300px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:center}
+         .heyebrow{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border:1px solid rgba(0,245,255,.25);border-radius:100px;margin-bottom:2rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-emerald);background:rgba(0,255,163,.05);opacity:0;animation:fup .8s .2s var(--expo) forwards}
+         .edot{width:6px;height:6px;background:var(--c-emerald);border-radius:50%;animation:pdot 2s infinite}
+         @keyframes pdot{50%{opacity:.4;transform:scale(.7)}}
+         /* WAVE NAME */
+         .hname{font-size:clamp(3.5rem,7vw,7rem);font-weight:800;line-height:.9;letter-spacing:-.03em;color:var(--c-white);opacity:0;animation:fup .9s .35s var(--expo) forwards;margin-bottom:.5rem}
+         .wc{display:inline-block;transition:transform .2s var(--bounce),color .2s,text-shadow .2s}
+         .wc:hover{transform:translateY(-14px) scale(1.18);color:var(--c-cyan);text-shadow:0 0 20px var(--c-cyan)}
+         .hbar{width:0;height:3px;margin:1.5rem 0;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));border-radius:2px;animation:ebar .8s .7s var(--expo) forwards}
+         @keyframes ebar{to{width:100px}}
+         .hrole{font-size:1.4rem;font-weight:400;color:var(--c-muted);margin-bottom:1.5rem;font-family:var(--font-s);font-style:italic;opacity:0;animation:fup .8s .6s var(--expo) forwards}
+         .hdesc{font-size:1rem;line-height:1.8;color:var(--c-muted);max-width:500px;margin-bottom:2.5rem;opacity:0;animation:fup .8s .75s var(--expo) forwards}
+         .hbtns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fup .8s .9s var(--expo) forwards}
+         .bp{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 2rem;background:linear-gradient(135deg,var(--c-cyan),var(--c-emerald));color:#000;font-weight:700;font-size:.78rem;letter-spacing:.12em;border-radius:100px;text-decoration:none;position:relative;overflow:hidden;transition:transform .3s var(--bounce),box-shadow .3s}
+         .bp::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--c-emerald),var(--c-cyan));opacity:0;transition:opacity .3s}
+         .bp:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 40px rgba(0,245,255,.35)}.bp:hover::before{opacity:1}
+         .bp span,.bp i{position:relative;z-index:1}
+         .bs{
+         display:inline-flex;
+         align-items:center;
+         justify-content:center;
+         gap:.6rem;
+         padding:.85rem 2rem;
+         background: rgba(255,255,255,0.05);        
+         border:1px solid rgba(255,255,255,.15);
+         color:#ccc;                             
+         font-weight:600;
+         font-size:.78rem;
+         letter-spacing:.12em;
+         border-radius:100px;
+         text-decoration:none;
+         backdrop-filter: blur(10px);
+         transition: all .3s var(--bounce);
+         }
+         .bs:hover{
+         background: rgba(239,68,68,0.12);
+         color:#ef4444;
+         border-color:#ef4444;
+         box-shadow:0 0 10px rgba(239,68,68,0.3);
+         }
+         .hmeta{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);opacity:0;animation:fup .8s 1.05s var(--expo) forwards}
+         .hmi{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--c-muted)}.hmi i{color:var(--c-cyan)}
+         /* HERO VISUAL */
+         .hvisual{position:relative;opacity:0;animation:fleft .9s .5s var(--expo) forwards}
+         .hframe{position:relative;width:100%;aspect-ratio:3/4;border-radius:2rem;overflow:hidden;border:1px solid rgba(0,245,255,.2);box-shadow:0 0 60px rgba(0,245,255,.08);transition:box-shadow .5s}
+         .hframe:hover{box-shadow:0 0 80px rgba(0,245,255,.2)}
+         .hframe img{width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(.15) brightness(.9);transition:filter .5s,transform .5s}
+         .hframe:hover img{filter:grayscale(0) brightness(1);transform:scale(1.02)}
+         .hovlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(3,5,8,.8) 100%)}
+         .hscan{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent,transparent 3px,rgba(0,245,255,.03) 3px,rgba(0,245,255,.03) 4px);pointer-events:none}
+         .fbadge{position:absolute;display:flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;background:rgba(8,13,20,.9);backdrop-filter:blur(10px);border-radius:100px;font-family:var(--font-m);font-size:.7rem;letter-spacing:.1em;animation:bfloat 4s ease-in-out infinite alternate;cursor:pointer;transition:transform .2s var(--bounce)}
+         .fbadge:hover{transform:scale(1.15) !important}
+         .fb1{top:-1rem;right:-1.5rem;border:1px solid rgba(0,255,163,.3);color:var(--c-emerald);animation-delay:0s}
+         .fb2{bottom:2rem;left:-2rem;border:1px solid rgba(0,245,255,.3);color:var(--c-cyan);animation-delay:-2s}
+         .fb3{top:45%;right:-2rem;border:1px solid rgba(255,179,71,.3);color:var(--c-amber);animation-delay:-1s}
+         @keyframes bfloat{100%{transform:translateY(-8px)}}
+         .rd{position:absolute;border-radius:50%;border:1px solid;pointer-events:none;transition:transform 1s var(--expo)}
+         .r1{width:110%;height:110%;top:-5%;left:-5%;border-color:rgba(0,245,255,.08);transform:rotate(-8deg)}
+         .r2{width:125%;height:125%;top:-12%;left:-12%;border-color:rgba(0,255,163,.05);transform:rotate(12deg)}
+         .hvisual:hover .r1{transform:rotate(8deg)}.hvisual:hover .r2{transform:rotate(-12deg)}
+         .scind{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:var(--font-m);font-size:.6rem;letter-spacing:.25em;color:var(--c-muted);animation:fin 1s 1.5s both}
+         .scline{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--c-cyan),transparent);animation:spulse 2s infinite}
+         @keyframes spulse{50%{opacity:1}0%,100%{opacity:.3}}
+         /* SECTIONS */
+         .sec{padding:8rem 3rem}.si{max-width:1300px;margin:0 auto}
+         .slbl{display:inline-block;font-family:var(--font-m);font-size:.65rem;letter-spacing:.25em;color:var(--c-cyan);padding:.35rem 1rem;border:1px solid rgba(0,245,255,.2);border-radius:100px;margin-bottom:1.5rem}
+         .stitle{font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--c-white);margin-bottom:1rem}
+         .stitle .ac{color:transparent;-webkit-text-stroke:1px rgba(0,245,255,.4)}
+         /* ANIMATIONS */
+         @keyframes fup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+         @keyframes fleft{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+         @keyframes fin{from{opacity:0}to{opacity:1}}
+         .rv{opacity:0;transform:translateY(40px);transition:opacity .9s var(--expo),transform .9s var(--expo)}
+         .rv.vis{opacity:1;transform:translateY(0)}
+         .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+         /* ABOUT */
+         #about{background:var(--c-bg);border-top:1px solid var(--c-border)}
+         .agrid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:start}
+         .asticky{position:sticky;top:7rem}
+         .asub{font-family:var(--font-s);font-style:italic;font-size:1.5rem;color:var(--c-muted);margin-top:1rem;margin-bottom:3rem}
+         .srow{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+         .scard{padding:1.5rem 1rem;border:1px solid var(--c-border);border-radius:1rem;text-align:center;background:var(--c-surface);transition:border-color .3s,transform .3s var(--bounce);cursor:pointer;position:relative;overflow:hidden}
+         .scard::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(0,245,255,.1),transparent 70%);opacity:0;transition:opacity .3s}
+         .scard:hover{border-color:rgba(0,245,255,.4);transform:translateY(-6px) scale(1.04)}.scard:hover::after{opacity:1}
+         .snum{font-size:2rem;font-weight:800;color:var(--c-cyan);display:block}
+         .slb{font-size:.65rem;letter-spacing:.15em;color:var(--c-muted);margin-top:.25rem;display:block}
+         .afeats{display:flex;flex-direction:column;gap:2rem}
+         .fcard{display:flex;gap:1.5rem;align-items:flex-start;padding:1.75rem;border:1px solid var(--c-border);border-radius:1.25rem;background:var(--c-surface);transition:border-color .3s,transform .4s var(--expo),box-shadow .4s;position:relative;overflow:hidden}
+         .fcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,245,255,.04),transparent);opacity:0;transition:opacity .4s}
+         .fcard:hover{border-color:rgba(0,245,255,.25);transform:translateX(6px);box-shadow:-4px 0 24px rgba(0,245,255,.05)}.fcard:hover::before{opacity:1}
+         .fico{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:transform .3s var(--bounce)}
+         .fcard:hover .fico{transform:rotate(-10deg) scale(1.15)}
+         .fico.cy{background:rgba(0,245,255,.1);color:var(--c-cyan)}.fico.em{background:rgba(0,255,163,.1);color:var(--c-emerald)}.fico.am{background:rgba(255,179,71,.1);color:var(--c-amber)}
+         .ftitle{font-size:.95rem;font-weight:700;color:var(--c-white);margin-bottom:.4rem}.fdesc{font-size:.85rem;line-height:1.7;color:var(--c-muted)}
+         /* EXPERIENCE */
+         #experience{background:var(--c-surface);border-top:1px solid var(--c-border)}
+         .ecard{max-width:860px;padding:3rem;border:1px solid var(--c-border);border-radius:2rem;background:rgba(0,245,255,.02);position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
+         .ecard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald))}
+         .ecard:hover{border-color:rgba(0,245,255,.25);box-shadow:0 24px 64px rgba(0,245,255,.06)}
+         .ehdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem}
+         .ecomp{font-size:1.8rem;font-weight:800;color:var(--c-white)}.erole{font-size:.85rem;color:var(--c-emerald);font-family:var(--font-m);letter-spacing:.1em;margin-top:.3rem}
+         .edate{font-family:var(--font-m);font-size:.7rem;padding:.5rem 1rem;border-radius:100px;background:var(--c-bg);color:var(--c-muted);border:1px solid var(--c-border);white-space:nowrap}
+         .eitems{display:flex;flex-direction:column;gap:1rem}
+         .eitem{display:flex;gap:1rem;align-items:flex-start;font-size:.9rem;color:var(--c-text)}
+         .edot{width:5px;height:5px;background:var(--c-emerald);border-radius:50%;flex-shrink:0;margin-top:.5rem}
+         .etags{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:2rem}
+         .etag{font-size:.7rem;letter-spacing:.1em;padding:.35rem .9rem;border-radius:100px;background:var(--c-bg);color:var(--c-muted);border:1px solid var(--c-border);transition:color .2s,border-color .2s,transform .2s}
+         .etag:hover{color:var(--c-cyan);border-color:rgba(0,245,255,.3);transform:translateY(-2px)}
+         /* PROJECTS */
+         #projects{background:var(--c-bg);border-top:1px solid var(--c-border)}
+         .phdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem}
+         .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+         .pcard{background:var(--c-surface);border:1px solid var(--c-border);border-radius:1.5rem;overflow:hidden;transition:border-color .3s;cursor:pointer;position:relative;will-change:transform}
+         .pcard:hover{border-color:rgba(0,245,255,.2)}
+         .ptop{height:3px}.pbody{padding:2rem}
+         .picon{font-size:2rem;margin-bottom:1.2rem;display:block;transition:transform .4s var(--bounce)}
+         .pcard:hover .picon{transform:scale(1.2) rotate(-5deg)}
+         .pbadge{display:inline-block;font-family:var(--font-m);font-size:.6rem;letter-spacing:.15em;padding:.3rem .7rem;background:var(--c-bg);border-radius:100px;float:right;border:1px solid var(--c-border);color:var(--c-muted)}
+         .ptitle{font-size:1rem;font-weight:700;color:var(--c-white);margin-bottom:.75rem;line-height:1.4;transition:color .3s}
+         .pcard:hover .ptitle{color:var(--c-cyan)}
+         .pdesc{font-size:.82rem;line-height:1.75;color:var(--c-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+         .pfooter{padding:1rem 2rem;border-top:1px solid var(--c-border);display:flex;align-items:center}
+         .plink{font-family:var(--font-m);font-size:.68rem;letter-spacing:.1em;color:var(--c-emerald);display:flex;align-items:center;gap:.4rem;transition:gap .2s}
+         .pcard:hover .plink{gap:.7rem}
+         /* MODAL */
+         .moverlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0);backdrop-filter:blur(0px);display:flex;align-items:center;justify-content:center;padding:1.5rem;pointer-events:none;transition:background .4s,backdrop-filter .4s}
+         .moverlay.open{background:rgba(0,0,0,.85);backdrop-filter:blur(16px);pointer-events:all}
+         .mbox{max-width:680px;width:100%;background:#0a0f1a;border:1px solid rgba(0,245,255,.2);border-radius:2rem;overflow:hidden;transform:scale(.9) translateY(20px);opacity:0;transition:transform .4s var(--expo),opacity .4s}
+         .moverlay.open .mbox{transform:scale(1) translateY(0);opacity:1}
+         .macc{height:3px}.mcont{padding:2.5rem}
+         .mclose{display:flex;justify-content:flex-end;margin-bottom:1.5rem}
+         .mclose button{width:36px;height:36px;border-radius:50%;background:var(--c-bg);border:1px solid var(--c-border);color:var(--c-muted);font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:none;transition:color .2s,transform .2s}
+         .mclose button:hover{color:var(--c-white);transform:rotate(90deg)}
+         .mtitle{font-size:1.6rem;font-weight:800;color:var(--c-white);margin-bottom:1.25rem;line-height:1.3}
+         .mdesc{font-size:.9rem;line-height:1.8;color:var(--c-muted);margin-bottom:1.75rem}
+         .mlist{display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem}
+         .mli{display:flex;gap:.75rem;align-items:flex-start;font-size:.88rem;color:var(--c-text)}
+         .mlid{width:5px;height:5px;background:var(--c-emerald);border-radius:50%;flex-shrink:0;margin-top:.45rem}
+         .mhl{background:rgba(0,255,163,.05);border:1px solid rgba(0,255,163,.15);border-radius:1rem;padding:1rem 1.5rem;margin-bottom:2rem;font-family:var(--font-m);font-size:.8rem;color:var(--c-emerald);text-align:center;letter-spacing:.08em}
+         .macts{display:flex;gap:1rem}
+         /* SKILLS */
+         #skills{background:var(--c-surface);border-top:1px solid var(--c-border)}
+         .skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;margin-top:4rem}
+         .sgtitle{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+         .sgname{font-size:.72rem;font-weight:700;letter-spacing:.2em}.sgsub{font-size:.65rem;color:var(--c-muted);letter-spacing:.1em;margin-top:.1rem}
+         .spills{display:flex;flex-wrap:wrap;gap:.5rem}
+         .spill{font-size:.75rem;padding:.4rem 1rem;background:var(--c-bg);border:1px solid var(--c-border);border-radius:100px;color:var(--c-muted);transition:color .25s,border-color .25s,transform .25s var(--bounce),background .25s,box-shadow .25s;cursor:pointer;user-select:none}
+         .spill:hover{color:var(--c-white);border-color:rgba(0,245,255,.3);transform:translateY(-3px) scale(1.05);background:rgba(0,245,255,.06);box-shadow:0 6px 20px rgba(0,245,255,.12)}
+         .spill.hl{border-color:rgba(0,245,255,.25);color:var(--c-cyan)}
+         .spill.popped{animation:ppop .5s var(--bounce)}
+         @keyframes ppop{0%{transform:scale(1)}40%{transform:scale(1.4) rotate(-3deg)}70%{transform:scale(.9)}100%{transform:scale(1)}}
+         @keyframes pfloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-45px);opacity:0}}
+         .prow{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--c-border)}
+         .ptitle2{font-size:.72rem;font-weight:700;letter-spacing:.2em;color:var(--c-muted);margin-bottom:2rem}
+         .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+         .bhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+         .blbl{font-size:.8rem;color:var(--c-text)}.bpct{font-family:var(--font-m);font-size:.72rem;color:var(--c-muted)}
+         .btrack{height:3px;background:var(--c-bg);border-radius:2px;overflow:hidden}
+         .bfill{height:100%;border-radius:2px;width:0;transition:width 1.2s var(--expo);background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));box-shadow:0 0 6px var(--c-cyan)}
+         /* PUBLICATION */
+         #publication{background:var(--c-bg);border-top:1px solid var(--c-border)}
+         .pubcard{max-width:800px;margin:0 auto;padding:3.5rem;border:1px solid rgba(255,179,71,.15);border-radius:2rem;background:rgba(255,179,71,.02);text-align:center;position:relative;overflow:hidden;transition:border-color .4s,box-shadow .4s}
+         .pubcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c-amber),transparent)}
+         .pubcard:hover{border-color:rgba(255,179,71,.3);box-shadow:0 0 60px rgba(255,179,71,.05)}
+         .plbl{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-m);font-size:.68rem;letter-spacing:.18em;color:var(--c-amber);margin-bottom:1.5rem}
+         .ptit{font-size:1.6rem;font-weight:700;color:var(--c-white);line-height:1.4;max-width:560px;margin:0 auto 1.25rem}
+         .pdsc{font-size:.88rem;color:var(--c-muted);line-height:1.8;max-width:440px;margin:0 auto 2rem}
+         .ptags2{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+         .ptag2{font-size:.7rem;padding:.4rem 1rem;background:var(--c-bg);border:1px solid rgba(255,179,71,.2);border-radius:100px;color:var(--c-amber);letter-spacing:.1em;transition:transform .2s var(--bounce)}
+         .ptag2:hover{transform:translateY(-3px)}
+         /* ACHIEVEMENTS */
+         #achievements{background:var(--c-surface);border-top:1px solid var(--c-border)}
+         .achgrid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:700px;margin-top:3rem}
+         .achcard{padding:2.5rem;border:1px solid var(--c-border);border-radius:1.5rem;background:var(--c-bg);transition:border-color .3s,transform .4s var(--bounce),box-shadow .4s;position:relative;overflow:hidden;cursor:pointer}
+         .achcard::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 0%,rgba(0,245,255,.05),transparent 60%);opacity:0;transition:opacity .4s}
+         .achcard:hover{border-color:rgba(0,245,255,.2);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.4)}.achcard:hover::before{opacity:1}
+         .achemo{font-size:2.5rem;display:block;margin-bottom:1rem;transition:transform .3s var(--bounce)}
+         .achcard:hover .achemo{transform:scale(1.3) rotate(10deg)}
+         .acht{font-size:1rem;font-weight:700;color:var(--c-white);margin-bottom:.35rem}
+         .achs{font-size:.8rem;color:var(--c-muted)}
+         /* CONTACT */
+         #contact{background:var(--c-bg);border-top:1px solid var(--c-border);padding:6rem 3rem}
+         .cinner{max-width:1300px;margin:0 auto}
+         .ctop{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:3rem;border-bottom:1px solid var(--c-border)}
+         .chl{font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.02em;color:var(--c-white)}
+         .chl em{font-style:italic;font-family:var(--font-s);color:var(--c-cyan)}
+         .clinks{display:flex;flex-direction:column;gap:.75rem}
+         .clink{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--c-muted);text-decoration:none;transition:color .2s,gap .2s}
+         .clink i{color:var(--c-cyan);width:18px}.clink:hover{color:var(--c-white);gap:1rem}
+         .cbot{display:flex;justify-content:space-between;align-items:center;padding-top:2rem}
+         .flogo{font-size:1.5rem;font-weight:800;letter-spacing:.05em;color:var(--c-white)}
+         .fcopy{font-family:var(--font-m);font-size:.68rem;color:var(--c-muted);letter-spacing:.08em}
+         .fsocs{display:flex;gap:1rem}
+         .fsoc{width:36px;height:36px;border-radius:50%;background:var(--c-surface);border:1px solid var(--c-border);display:flex;align-items:center;justify-content:center;color:var(--c-muted);text-decoration:none;transition:color .2s,border-color .2s,transform .3s var(--bounce)}
+         .fsoc:hover{color:var(--c-cyan);border-color:rgba(0,245,255,.3);transform:translateY(-3px)}
+         /* LOADER */
+         #loader{position:fixed;inset:0;z-index:10000;background:var(--c-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+         #loader.hidden{opacity:0;visibility:hidden}
+         .llogo{font-size:3rem;font-weight:800;letter-spacing:-.03em;color:var(--c-white);margin-bottom:.5rem;position:relative;animation:gm 8s infinite}
+         .llogo::before,.llogo::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;background:var(--c-bg)}
+         .llogo::before{left:2px;text-shadow:-2px 0 var(--c-cyan);animation:g1 8s infinite;clip-path:polygon(0 0,100% 0,100% 40%,0 40%)}
+         .llogo::after{left:-2px;text-shadow:2px 0 var(--c-emerald);animation:g2 8s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%)}
+         @keyframes gm{0%,90%,100%{transform:none}92%{transform:skew(-2deg)}94%{transform:skew(2deg)}}
+         @keyframes g1{0%,90%,100%{transform:none;opacity:0}91%{transform:translateX(-3px);opacity:1}93%{transform:translateX(3px);opacity:1}95%{opacity:0}}
+         @keyframes g2{0%,90%,100%{transform:none;opacity:0}92%{transform:translateX(3px);opacity:1}94%{transform:translateX(-3px);opacity:1}96%{opacity:0}}
+         .lsub{font-family:var(--font-m);font-size:.7rem;letter-spacing:.2em;color:var(--c-cyan);margin-bottom:2rem}
+         .ltrack{width:200px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+         .lfill{height:100%;background:linear-gradient(90deg,var(--c-cyan),var(--c-emerald));width:0;animation:lfill 1.2s var(--expo) forwards}
+         @keyframes lfill{to{width:100%}}
+         .ltxt{font-family:var(--font-m);font-size:.65rem;letter-spacing:.25em;color:var(--c-muted);margin-top:1rem}
+         /* TERMINAL */
+         #term{position:fixed;bottom:2rem;right:2rem;z-index:5000;width:420px;background:#000d0d;border:1px solid rgba(0,245,255,.3);border-radius:1rem;overflow:hidden;box-shadow:0 0 60px rgba(0,245,255,.15);transform:translateY(120%) scale(.9);opacity:0;transition:transform .4s var(--expo),opacity .4s;pointer-events:none}
+         #term.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
+         .thdr{background:rgba(0,245,255,.06);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,245,255,.1)}
+         .tdots{display:flex;gap:.4rem}.tdot{width:10px;height:10px;border-radius:50%}.td-r{background:#ff5f57}.td-y{background:#febc2e}.td-g{background:#28c840}
+         .ttitle{font-family:var(--font-m);font-size:.65rem;letter-spacing:.15em;color:var(--c-muted)}
+         .tclose{cursor:none;color:var(--c-muted);transition:color .2s;font-size:.9rem;background:none;border:none}.tclose:hover{color:var(--c-white)}
+         .tbody{padding:1rem;height:200px;overflow-y:auto;font-family:var(--font-m);font-size:.72rem;line-height:1.7}
+         .tl{color:var(--c-emerald)}.tl.dim{color:var(--c-muted)}.tl.cy{color:var(--c-cyan)}.tl.am{color:var(--c-amber)}
+         .tinrow{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-top:1px solid rgba(0,245,255,.1)}
+         .tprompt{color:var(--c-cyan);font-family:var(--font-m);font-size:.72rem}
+         #tinput{flex:1;background:transparent;border:none;outline:none;color:var(--c-white);font-family:var(--font-m);font-size:.72rem;cursor:none}
+         /* TOOLTIP */
+         .tip{position:relative}
+         .tip .tt{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:#0a0f1a;border:1px solid rgba(0,245,255,.2);border-radius:.5rem;padding:.4rem .8rem;font-family:var(--font-m);font-size:.62rem;letter-spacing:.08em;color:var(--c-cyan);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s,transform .2s;z-index:100}
+         .tip .tt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:rgba(0,245,255,.2)}
+         .tip:hover .tt{opacity:1;transform:translateX(-50%) translateY(0)}
+         /* EE HINT */
+         .eehint{position:fixed;bottom:2rem;left:2rem;z-index:4000;font-family:var(--font-m);font-size:.6rem;letter-spacing:.15em;color:var(--c-muted);opacity:0;animation:fin 1s 5s forwards}
+         /* HELPERS */
+         .valink{font-family:var(--font-m);font-size:.72rem;letter-spacing:.15em;color:var(--c-cyan);text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:gap .2s}
+         .valink:hover{gap:.85rem}
+         .gc{color:var(--c-cyan)}.ge{color:var(--c-emerald)}.ga{color:var(--c-amber)}
+         .mag{transition:transform .3s var(--expo)}
+         .tcur{display:inline-block;width:2px;height:1em;background:var(--c-cyan);margin-left:2px;animation:blink .8s infinite;vertical-align:middle}
+         @keyframes blink{51%,100%{opacity:0}}
+         /* RESPONSIVE */
+         @media(max-width:900px){
+         nav{padding:1.2rem 1.5rem}.nlinks{display:none}
+         .hinner{grid-template-columns:1fr}.hvisual{display:none}
+         .agrid{grid-template-columns:1fr}.asticky{position:static}
+         .pgrid{grid-template-columns:1fr}.skgrid{grid-template-columns:1fr}
+         .bgrid{grid-template-columns:1fr}.achgrid{grid-template-columns:1fr}
+         .ctop{flex-direction:column;align-items:flex-start;gap:2rem}
+         .cbot{flex-direction:column;gap:1.5rem;text-align:center}
+         .sec{padding:5rem 1.5rem}
+         #term{width:calc(100% - 2rem);right:1rem;bottom:1rem}
+         }
+      </style>
+   </head>
+   <body>
+      <canvas id="cc" style="position:fixed;inset:0;z-index:9000;pointer-events:none"></canvas>
+      <!-- LOADER -->
+      <div id="loader">
+         <div class="llogo" data-text="EK">Clock Signal Detected...</div>
+         <div class="lsub">EZHILKIRTHIK M</div>
+         <div class="ltrack">
+            <div class="lfill"></div>
+         </div>
+         <div class="ltxt" id="ltxt">INITIALIZING...</div>
       </div>
-      <div class="hmeta">
-        <div class="hmi"><i class="fa-solid fa-location-dot"></i>Coimbatore, India</div>
-        <div class="hmi tip" style="cursor:pointer">
-          <i class="fa-solid fa-envelope"></i>ezhilkirthikm@gmail.com
-        </div>
+      <div id="cd"></div>
+      <div id="cr"></div>
+      <div id="cl"></div>
+      <div id="noise"></div>
+      <div id="sp"></div>
+      <!-- NAV -->
+      <nav id="nav">
+         <a href="#hero" class="nlogo">
+            <div class="nicon"><i class="fa-solid fa-microchip"></i></div>
+            <span class="ntxt">EZHILKIRTHIK</span>
+         </a>
+         <div class="nlinks">
+            <a href="#about" class="nlink">ABOUT</a>
+            <a href="#experience" class="nlink">EXPERIENCE</a>
+            <a href="#projects" class="nlink">PROJECTS</a>
+            <a href="#skills" class="nlink">SKILLS</a>
+            <a href="#publication" class="nlink">RESEARCH</a>
+         </div>
+         <a href="https://github.com/Ezhilkirthik" target="_blank" class="ncta mag"><i class="fa-brands fa-github"></i>&nbsp;GITHUB</a>
+      </nav>
+      <!-- HERO -->
+      <section id="hero">
+         <div class="gridbg"></div>
+         <div class="orb o1"></div>
+         <div class="orb o2"></div>
+         <div class="orb o3"></div>
+         <div class="hinner">
+            <div>
+               <div class="heyebrow"><span class="edot"></span>AVAILABLE FOR OPPORTUNITIES</div>
+               <h1 class="hname" id="hname"></h1>
+               <div class="hbar"></div>
+               <p class="hrole"><span id="ttext">Electronics Engineer</span><span class="tcur"></span></p>
+               <p class="hdesc">Motivated ECE undergraduate specializing in power electronics, FPGA design, and automotive embedded systems — building circuits that power the future.</p>
+               <div class="hbtns">
+                  <a href="#projects" class="bp mag"><span>EXPLORE WORK</span><i class="fa-solid fa-arrow-right"></i></a>
+                  <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="bs mag"><i class="fa-brands fa-linkedin"></i><span>LINKEDIN</span></a>
+               </div>
+               <div class="hmeta">
+                  <div class="hmi"><i class="fa-solid fa-location-dot"></i>Coimbatore, India</div>
+                  <div class="hmi tip" style="cursor:pointer">
+                     <i class="fa-solid fa-envelope"></i>ezhilkirthikm@gmail.com
+                  </div>
+               </div>
+            </div>
+            <div class="hvisual">
+               <div class="rd r1"></div>
+               <div class="rd r2"></div>
+               <div class="hframe" id="tilt">
+                  <img src="images/profile.png" alt="Ezhilkirthik M">
+                  <div class="hovlay"></div>
+                  <div class="hscan"></div>
+               </div>
+            </div>
+         </div>
+         <div class="scind">
+            SCROLL DOWN
+            <div class="scline"></div>
+         </div>
+      </section>
+      <!-- ABOUT -->
+      <section id="about" class="sec">
+         <div class="si">
+            <div class="agrid">
+               <div class="asticky rv">
+                  <div class="slbl">01 — PROFILE</div>
+                  <h2 class="stitle">About <span class="ac">Me</span></h2>
+                  <p class="asub">Engineer by craft,<br>builder by passion.</p>
+                  <div class="srow">
+                     <div class="scard rv d1 tip" ><span class="snum">6+</span><span class="slb">PROJECTS</span><span class="tt">🎉 Click!</span></div>
+                     <div class="scard rv d2 tip" ><span class="snum">1</span><span class="slb">IEEE PAPER</span><span class="tt">🏆 Published!</span></div>
+                     <div class="scard rv d3 tip" ><span class="snum">∞</span><span class="slb">PASSION</span><span class="tt">🔥 Unlimited</span></div>
+                  </div>
+               </div>
+               <div class="afeats">
+                  <div class="fcard rv d1">
+                     <div class="fico cy"><i class="fa-solid fa-flask"></i></div>
+                     <div>
+                        <div class="ftitle">Lab & Hardware Expertise</div>
+                        <div class="fdesc">Experienced with multimeters, oscilloscopes, electronic loads, and prototype PCB assembly for DC-DC converters and battery systems.</div>
+                     </div>
+                  </div>
+                  <div class="fcard rv d2">
+                     <div class="fico em"><i class="fa-solid fa-microchip"></i></div>
+                     <div>
+                        <div class="ftitle">Digital Design</div>
+                        <div class="fdesc">Strong foundation in FPGA, RTL design using Verilog, and embedded systems development with STM32 and Raspberry Pi.</div>
+                     </div>
+                  </div>
+                  <div class="fcard rv d3">
+                     <div class="fico am"><i class="fa-solid fa-car"></i></div>
+                     <div>
+                        <div class="ftitle">Automotive Focus</div>
+                        <div class="fdesc">Passionate about sustainable transport, power electronics, control systems, and ISO 26262 compliant design practices.</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- EXPERIENCE -->
+      <section id="experience" class="sec">
+         <div class="si">
+            <div class="slbl rv">02 — EXPERIENCE</div>
+            <h2 class="stitle rv" style="margin-bottom:3rem">Professional <span class="ac">Experience</span></h2>
+            <div class="ecard rv">
+               <div class="ehdr">
+                  <div>
+                     <div class="ecomp">Maven Silicon</div>
+                     <div class="erole">RTL DESIGN INTERN</div>
+                  </div>
+                  <div class="edate">AUG 2024 — SEP 2024</div>
+               </div>
+               <div class="eitems">
+                  <div class="eitem">
+                     <div class="edot"></div>
+                     <div>Developed RTL for AMBA AHB-APB Bridge in Verilog, handling full protocol compliance.</div>
+                  </div>
+                  <div class="eitem">
+                     <div class="edot"></div>
+                     <div>Implemented FSM-based protocol control logic for robust state management.</div>
+                  </div>
+                  <div class="eitem">
+                     <div class="edot"></div>
+                     <div>Created self-checking testbenches and performed detailed waveform debugging.</div>
+                  </div>
+               </div>
+               <div class="etags"><span class="etag">Verilog</span><span class="etag">AMBA</span><span class="etag">FPGA</span><span class="etag">FSM</span><span class="etag">RTL</span><span class="etag">Testbench</span></div>
+            </div>
+         </div>
+      </section>
+      <!-- PROJECTS -->
+      <section id="projects" class="sec">
+         <div class="si">
+            <div class="phdr">
+               <div>
+                  <div class="slbl rv">03 — PROJECTS</div>
+                  <h2 class="stitle rv">Featured <span class="ac">Work</span></h2>
+               </div>
+               <a href="https://github.com/Ezhilkirthik" target="_blank" class="valink rv">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="pgrid">
+               <div class="pcard rv d1" onclick="openM(0)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#00f5ff,#00ffa3)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon gc fa-solid fa-bolt"></i><span class="pbadge">POWER</span></div>
+                     <div class="ptitle">High-Efficiency Synchronous DC-DC Buck Converter</div>
+                     <div class="pdesc">12V-to-5V synchronous buck converter modeled in LTspice and MATLAB. Validated with lab instruments, oscilloscope and prototype PCB assemblies.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+               <div class="pcard rv d2" onclick="openM(1)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#a855f7,#ec4899)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-eye" style="color:#a855f7"></i><span class="pbadge">ANALOG</span></div>
+                     <div class="ptitle">Hardware Logic-Based Color Detection System</div>
+                     <div class="pdesc">Microcontroller-free color sorting using analog signal conditioning and comparator circuits — pure hardware intelligence.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+               <div class="pcard rv d3" onclick="openM(2)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#f59e0b,#f97316)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-chart-line" style="color:#f59e0b"></i><span class="pbadge">CONTROL</span></div>
+                     <div class="ptitle">Quarter Car Suspension Control Analysis</div>
+                     <div class="pdesc">Bode plot analysis of passive vs Skyhook semi-active suspension. 9% reduction in RMS body acceleration.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+               <div class="pcard rv d1" onclick="openM(3)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#f97316,#ef4444)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-car" style="color:#f97316"></i><span class="pbadge">AUTOMOTIVE</span></div>
+                     <div class="ptitle">Automotive ECU & Power Monitoring System</div>
+                     <div class="pdesc">Real-time STM32F401RE based system for speed, collision and battery monitoring with sensor interfacing.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+               <div class="pcard rv d2" onclick="openM(4)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#00ffa3,#00f5ff)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-microchip" style="color:#00ffa3"></i><span class="pbadge">FPGA</span></div>
+                     <div class="ptitle">FPGA-Based Digital Speedometer</div>
+                     <div class="pdesc">Hall sensor interface in Verilog. Optimized RTL with 34% LUT, 50% register and 63% I/O reduction.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+               <div class="pcard rv d3" onclick="openM(5)">
+                  <div class="ptop" style="background:linear-gradient(90deg,#38bdf8,#818cf8)"></div>
+                  <div class="pbody">
+                     <div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-shield-halved" style="color:#38bdf8"></i><span class="pbadge">EMBEDDED</span></div>
+                     <div class="ptitle">Sentinel-X Multi-Modal Access Control</div>
+                     <div class="pdesc">Raspberry Pi Pico based security system with reliable hardware connections and multi-modal authentication.</div>
+                  </div>
+                  <div class="pfooter">
+                     <div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- SKILLS -->
+      <section id="skills" class="sec">
+         <div class="si">
+            <div class="slbl rv">04 — SKILLS</div>
+            <h2 class="stitle rv">Technical <span class="ac">Expertise</span></h2>
+            <div class="skgrid">
+               <div class="rv d1">
+                  <div class="sgtitle">
+                     <span class="gc" style="font-size:1.2rem"><i class="fa-solid fa-bolt"></i></span>
+                     <div>
+                        <div class="sgname gc">ELECTRICAL & CIRCUIT</div>
+                        <div class="sgsub">CORE HARDWARE</div>
+                     </div>
+                  </div>
+                  <div class="spills">
+                     <span class="spill hl">Circuit Analysis</span><span class="spill hl">Analog Electronics</span><span class="spill hl">Signal Conditioning</span><span class="spill hl">Sensor Interface</span><span class="spill hl">Voltage Dividers</span><span class="spill hl">Comparator Circuits</span><span class="spill hl">Control Systems</span><span class="spill hl">EMI/EMC Basics</span><span class="spill hl">Low-Voltage Design</span>
+                  </div>
+               </div>
+               <div class="rv d2">
+                  <div class="sgtitle">
+                     <span class="ge" style="font-size:1.2rem"><i class="fa-solid fa-microchip"></i></span>
+                     <div>
+                        <div class="sgname ge">PROGRAMMING & DOMAINS</div>
+                        <div class="sgsub">SOFTWARE & EXPERTISE</div>
+                     </div>
+                  </div>
+                  <div class="spills">
+                     <span class="spill hl">Verilog</span><span class="spill hl">Embedded C</span><span class="spill hl">Python</span><span class="spill hl">MATLAB</span><span class="spill hl">FPGA Design</span><span class="spill hl">RTL Design</span><span class="spill hl">Digital Logic</span><span class="spill hl">DSP</span><span class="spill hl">Embedded Systems</span><span class="spill hl">PCB Design</span><span class="spill hl">IoT Systems</span><span class="spill hl">STM32</span><span class="spill hl">Raspberry Pi</span>
+                  </div>
+               </div>
+               <div class="rv d3">
+                  <div class="sgtitle">
+                     <span class="ga" style="font-size:1.2rem"><i class="fa-solid fa-toolbox"></i></span>
+                     <div>
+                        <div class="sgname ga">TOOLS & STANDARDS</div>
+                        <div class="sgsub">SOFTWARE & COMPLIANCE</div>
+                     </div>
+                  </div>
+                  <div class="spills">
+                     <span class="spill hl">Xilinx Vivado</span><span class="spill hl">ModelSim</span><span class="spill hl">LTspice</span><span class="spill hl">STM32CubeIDE</span><span class="spill hl">Eagle PCB</span><span class="spill hl">Simulink</span><span class="spill hl">Proteus</span><span class="spill hl">ISO 26262</span><span class="spill hl">MISRA-C</span><span class="spill hl">IEC 61000</span><span class="spill hl">CAN</span><span class="spill hl">UART / I2C / SPI</span><span class="spill hl">AMBA AHB/APB</span>
+                  </div>
+               </div>
+            </div>
+            <div class="bgrid" id="bg">
+            </div>
+         </div>
+      </section>
+      <!-- PUBLICATION -->
+      <section id="publication" class="sec">
+         <div class="si">
+            <div style="text-align:center;margin-bottom:3rem">
+               <div class="slbl rv" style="display:inline-block">05 — RESEARCH</div>
+               <h2 class="stitle rv" style="margin-top:1rem">IEEE <span class="ac">Publication</span></h2>
+            </div>
+            <div class="pubcard rv">
+               <div class="plbl"><i class="fa-solid fa-book"></i>IEEE PUBLICATION</div>
+               <h3 class="ptit">Power and Area Optimized FFT Architecture Through Multiplier-Level Hardware Design</h3>
+               <p class="pdsc">Accepted and to be published with IEEE. Presents a hardware-efficient FFT implementation using optimized multiplier architectures on FPGA.</p>
+               <div class="ptags2"><span class="ptag2">FPGA</span><span class="ptag2">RTL OPTIMIZATION</span><span class="ptag2">VLSI</span><span class="ptag2">DSP</span></div>
+            </div>
+         </div>
+      </section>
+      <!-- ACHIEVEMENTS -->
+      <section id="achievements" class="sec">
+         <div class="si">
+            <div class="slbl rv">06 — RECOGNITION</div>
+            <h2 class="stitle rv">Achievements &amp; <span class="ac">Leadership</span></h2>
+            <div class="achgrid">
+               <div class="achcard rv d1" >
+                  <span class="achemo">🏆</span>
+                  <div class="acht">Finalist — OneAPI Intel AI Hackathon</div>
+                  <div class="achs">2024</div>
+               </div>
+               <div class="achcard rv d2" >
+                  <span class="achemo">👑</span>
+                  <div class="acht">Team Leader — Smart India Hackathon</div>
+                  <div class="achs">Led team in national level competition</div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- CONTACT -->
+      <section id="contact">
+         <div class="cinner">
+            <div class="ctop rv">
+               <h2 class="chl">Let's build something<br><em>extraordinary.</em></h2>
+               <div class="clinks">
+                  <a href="mailto:ezhilkirthikm@gmail.com" class="clink"><i class="fa-solid fa-envelope"></i>ezhilkirthikm@gmail.com</a>
+                  <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="clink"><i class="fa-brands fa-linkedin"></i>linkedin.com/in/ezhilkirthikm</a>
+                  <a href="https://github.com/Ezhilkirthik" target="_blank" class="clink"><i class="fa-brands fa-github"></i>github.com/Ezhilkirthik</a>
+                  <a href="tel:+918778459668" class="clink"><i class="fa-solid fa-phone"></i>+91 87784 59668</a>
+               </div>
+            </div>
+            <div class="cbot rv">
+               <div class="flogo">EZHILKIRTHIK</div>
+               <div center class="fcopy">Build by Ezhilkirthik M</div>
+               <div class="fsocs">
+                  <a href="mailto:ezhilkirthikm@gmail.com" class="fsoc"><i class="fa-solid fa-envelope"></i></a>
+                  <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="fsoc"><i class="fa-brands fa-linkedin"></i></a>
+                  <a href="https://github.com/Ezhilkirthik" target="_blank" class="fsoc"><i class="fa-brands fa-github"></i></a>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- MODAL -->
+      <div class="moverlay" id="mov" onclick="closeM(event)">
+         <div class="mbox">
+            <div class="macc" id="macc"></div>
+            <div class="mcont">
+               <div class="mclose"><button onclick="closeM()"><i class="fa-solid fa-xmark"></i></button></div>
+               <div id="mini"></div>
+            </div>
+         </div>
       </div>
-    </div>
-    <div class="hvisual">
-      <div class="rd r1"></div><div class="rd r2"></div>
-      <div class="hframe" id="tilt">
-        <img src="images/profile.png" alt="Ezhilkirthik M">
-        <div class="hovlay"></div><div class="hscan"></div>
-      </div>
-    </div>
-  </div>
-  <div class="scind">SCROLL DOWN<div class="scline"></div></div>
-</section>
-
-<!-- ABOUT -->
-<section id="about" class="sec">
-  <div class="si">
-    <div class="agrid">
-      <div class="asticky rv">
-        <div class="slbl">01 — PROFILE</div>
-        <h2 class="stitle">About <span class="ac">Me</span></h2>
-        <p class="asub">Engineer by craft,<br>builder by passion.</p>
-        <div class="srow">
-          <div class="scard rv d1 tip" ><span class="snum">6+</span><span class="slb">PROJECTS</span><span class="tt">🎉 Click!</span></div>
-          <div class="scard rv d2 tip" ><span class="snum">1</span><span class="slb">IEEE PAPER</span><span class="tt">🏆 Published!</span></div>
-          <div class="scard rv d3 tip" ><span class="snum">∞</span><span class="slb">PASSION</span><span class="tt">🔥 Unlimited</span></div>
-        </div>
-      </div>
-      <div class="afeats">
-        <div class="fcard rv d1"><div class="fico cy"><i class="fa-solid fa-flask"></i></div><div><div class="ftitle">Lab & Hardware Expertise</div><div class="fdesc">Experienced with multimeters, oscilloscopes, electronic loads, and prototype PCB assembly for DC-DC converters and battery systems.</div></div></div>
-        <div class="fcard rv d2"><div class="fico em"><i class="fa-solid fa-microchip"></i></div><div><div class="ftitle">Digital Design</div><div class="fdesc">Strong foundation in FPGA, RTL design using Verilog, and embedded systems development with STM32 and Raspberry Pi.</div></div></div>
-        <div class="fcard rv d3"><div class="fico am"><i class="fa-solid fa-car"></i></div><div><div class="ftitle">Automotive Focus</div><div class="fdesc">Passionate about sustainable transport, power electronics, control systems, and ISO 26262 compliant design practices.</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience" class="sec">
-  <div class="si">
-    <div class="slbl rv">02 — EXPERIENCE</div>
-    <h2 class="stitle rv" style="margin-bottom:3rem">Professional <span class="ac">Experience</span></h2>
-    <div class="ecard rv">
-      <div class="ehdr"><div><div class="ecomp">Maven Silicon</div><div class="erole">RTL DESIGN INTERN</div></div><div class="edate">AUG 2024 — SEP 2024</div></div>
-      <div class="eitems">
-        <div class="eitem"><div class="edot"></div><div>Developed RTL for AMBA AHB-APB Bridge in Verilog, handling full protocol compliance.</div></div>
-        <div class="eitem"><div class="edot"></div><div>Implemented FSM-based protocol control logic for robust state management.</div></div>
-        <div class="eitem"><div class="edot"></div><div>Created self-checking testbenches and performed detailed waveform debugging.</div></div>
-      </div>
-      <div class="etags"><span class="etag">Verilog</span><span class="etag">AMBA</span><span class="etag">FPGA</span><span class="etag">FSM</span><span class="etag">RTL</span><span class="etag">Testbench</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects" class="sec">
-  <div class="si">
-    <div class="phdr">
-      <div><div class="slbl rv">03 — PROJECTS</div><h2 class="stitle rv">Featured <span class="ac">Work</span></h2></div>
-      <a href="https://github.com/Ezhilkirthik" target="_blank" class="valink rv">VIEW ALL <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-    <div class="pgrid">
-      <div class="pcard rv d1" onclick="openM(0)"><div class="ptop" style="background:linear-gradient(90deg,#00f5ff,#00ffa3)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon gc fa-solid fa-bolt"></i><span class="pbadge">POWER</span></div><div class="ptitle">High-Efficiency Synchronous DC-DC Buck Converter</div><div class="pdesc">12V-to-5V synchronous buck converter modeled in LTspice and MATLAB. Validated with lab instruments, oscilloscope and prototype PCB assemblies.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-      <div class="pcard rv d2" onclick="openM(1)"><div class="ptop" style="background:linear-gradient(90deg,#a855f7,#ec4899)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-eye" style="color:#a855f7"></i><span class="pbadge">ANALOG</span></div><div class="ptitle">Hardware Logic-Based Color Detection System</div><div class="pdesc">Microcontroller-free color sorting using analog signal conditioning and comparator circuits — pure hardware intelligence.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-      <div class="pcard rv d3" onclick="openM(2)"><div class="ptop" style="background:linear-gradient(90deg,#f59e0b,#f97316)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-chart-line" style="color:#f59e0b"></i><span class="pbadge">CONTROL</span></div><div class="ptitle">Quarter Car Suspension Control Analysis</div><div class="pdesc">Bode plot analysis of passive vs Skyhook semi-active suspension. 9% reduction in RMS body acceleration.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-      <div class="pcard rv d1" onclick="openM(3)"><div class="ptop" style="background:linear-gradient(90deg,#f97316,#ef4444)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-car" style="color:#f97316"></i><span class="pbadge">AUTOMOTIVE</span></div><div class="ptitle">Automotive ECU & Power Monitoring System</div><div class="pdesc">Real-time STM32F401RE based system for speed, collision and battery monitoring with sensor interfacing.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-      <div class="pcard rv d2" onclick="openM(4)"><div class="ptop" style="background:linear-gradient(90deg,#00ffa3,#00f5ff)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-microchip" style="color:#00ffa3"></i><span class="pbadge">FPGA</span></div><div class="ptitle">FPGA-Based Digital Speedometer</div><div class="pdesc">Hall sensor interface in Verilog. Optimized RTL with 34% LUT, 50% register and 63% I/O reduction.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-      <div class="pcard rv d3" onclick="openM(5)"><div class="ptop" style="background:linear-gradient(90deg,#38bdf8,#818cf8)"></div><div class="pbody"><div style="display:flex;justify-content:space-between;align-items:flex-start"><i class="picon fa-solid fa-shield-halved" style="color:#38bdf8"></i><span class="pbadge">EMBEDDED</span></div><div class="ptitle">Sentinel-X Multi-Modal Access Control</div><div class="pdesc">Raspberry Pi Pico based security system with reliable hardware connections and multi-modal authentication.</div></div><div class="pfooter"><div class="plink"><i class="fa-solid fa-arrow-up-right-from-square"></i>VIEW PROJECT</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS -->
-<section id="skills" class="sec">
-  <div class="si">
-    <div class="slbl rv">04 — SKILLS</div>
-    <h2 class="stitle rv">Technical <span class="ac">Expertise</span></h2>
-    <div class="skgrid">
-      <div class="rv d1">
-        <div class="sgtitle"><span class="gc" style="font-size:1.2rem"><i class="fa-solid fa-bolt"></i></span><div><div class="sgname gc">ELECTRICAL & CIRCUIT</div><div class="sgsub">CORE HARDWARE</div></div></div>
-        <div class="spills">
-          <span class="spill hl">Circuit Analysis</span><span class="spill hl">Analog Electronics</span><span class="spill hl">Signal Conditioning</span><span class="spill hl">Sensor Interface</span><span class="spill hl">Voltage Dividers</span><span class="spill hl">Comparator Circuits</span><span class="spill hl">Control Systems</span><span class="spill hl">EMI/EMC Basics</span><span class="spill hl">Low-Voltage Design</span>
-        </div>
-      </div>
-      <div class="rv d2">
-        <div class="sgtitle"><span class="ge" style="font-size:1.2rem"><i class="fa-solid fa-microchip"></i></span><div><div class="sgname ge">PROGRAMMING & DOMAINS</div><div class="sgsub">SOFTWARE & EXPERTISE</div></div></div>
-        <div class="spills">
-          <span class="spill hl">Verilog</span><span class="spill hl">Embedded C</span><span class="spill hl">Python</span><span class="spill hl">MATLAB</span><span class="spill hl">FPGA Design</span><span class="spill hl">RTL Design</span><span class="spill hl">Digital Logic</span><span class="spill hl">DSP</span><span class="spill hl">Embedded Systems</span><span class="spill hl">PCB Design</span><span class="spill hl">IoT Systems</span><span class="spill hl">STM32</span><span class="spill hl">Raspberry Pi</span>
-        </div>
-      </div>
-      <div class="rv d3">
-        <div class="sgtitle"><span class="ga" style="font-size:1.2rem"><i class="fa-solid fa-toolbox"></i></span><div><div class="sgname ga">TOOLS & STANDARDS</div><div class="sgsub">SOFTWARE & COMPLIANCE</div></div></div>
-        <div class="spills">
-          <span class="spill hl">Xilinx Vivado</span><span class="spill hl">ModelSim</span><span class="spill hl">LTspice</span><span class="spill hl">STM32CubeIDE</span><span class="spill hl">Eagle PCB</span><span class="spill hl">Simulink</span><span class="spill hl">Proteus</span><span class="spill hl">ISO 26262</span><span class="spill hl">MISRA-C</span><span class="spill hl">IEC 61000</span><span class="spill hl">CAN</span><span class="spill hl">UART / I2C / SPI</span><span class="spill hl">AMBA AHB/APB</span>
-        </div>
-      </div>
-     </div>      
-    <div class="bgrid" id="bg">
-   </div>
-  </div>
-</section>
-
-<!-- PUBLICATION -->
-<section id="publication" class="sec">
-  <div class="si">
-    <div style="text-align:center;margin-bottom:3rem">
-      <div class="slbl rv" style="display:inline-block">05 — RESEARCH</div>
-      <h2 class="stitle rv" style="margin-top:1rem">IEEE <span class="ac">Publication</span></h2>
-    </div>
-    <div class="pubcard rv">
-      <div class="plbl"><i class="fa-solid fa-book"></i>IEEE PUBLICATION</div>
-      <h3 class="ptit">Power and Area Optimized FFT Architecture Through Multiplier-Level Hardware Design</h3>
-      <p class="pdsc">Accepted and to be published with IEEE. Presents a hardware-efficient FFT implementation using optimized multiplier architectures on FPGA.</p>
-      <div class="ptags2"><span class="ptag2">FPGA</span><span class="ptag2">RTL OPTIMIZATION</span><span class="ptag2">VLSI</span><span class="ptag2">DSP</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ACHIEVEMENTS -->
-<section id="achievements" class="sec">
-  <div class="si">
-    <div class="slbl rv">06 — RECOGNITION</div>
-    <h2 class="stitle rv">Achievements &amp; <span class="ac">Leadership</span></h2>
-    <div class="achgrid">
-      <div class="achcard rv d1" ><span class="achemo">🏆</span><div class="acht">Finalist — OneAPI Intel AI Hackathon</div><div class="achs">2024</div></div>
-      <div class="achcard rv d2" ><span class="achemo">👑</span><div class="acht">Team Leader — Smart India Hackathon</div><div class="achs">Led team in national level competition</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="cinner">
-    <div class="ctop rv">
-      <h2 class="chl">Let's build something<br><em>extraordinary.</em></h2>
-      <div class="clinks">
-        <a href="mailto:ezhilkirthikm@gmail.com" class="clink"><i class="fa-solid fa-envelope"></i>ezhilkirthikm@gmail.com</a>
-        <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="clink"><i class="fa-brands fa-linkedin"></i>linkedin.com/in/ezhilkirthikm</a>
-        <a href="https://github.com/Ezhilkirthik" target="_blank" class="clink"><i class="fa-brands fa-github"></i>github.com/Ezhilkirthik</a>
-        <a href="tel:+918778459668" class="clink"><i class="fa-solid fa-phone"></i>+91 87784 59668</a>
-      </div>
-    </div>
-    <div class="cbot rv">
-      <div class="flogo">EZHILKIRTHIK</div>
-      <div center class="fcopy">Build by Ezhilkirthik M</div>
-      <div class="fsocs">
-        <a href="mailto:ezhilkirthikm@gmail.com" class="fsoc"><i class="fa-solid fa-envelope"></i></a>
-        <a href="https://linkedin.com/in/ezhilkirthikm" target="_blank" class="fsoc"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="https://github.com/Ezhilkirthik" target="_blank" class="fsoc"><i class="fa-brands fa-github"></i></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MODAL -->
-<div class="moverlay" id="mov" onclick="closeM(event)">
-  <div class="mbox"><div class="macc" id="macc"></div>
-    <div class="mcont"><div class="mclose"><button onclick="closeM()"><i class="fa-solid fa-xmark"></i></button></div><div id="mini"></div></div>
-  </div>
-</div>
-
-<script>
-/* ── PROJECT DATA ── */
-const PD=[
-  {t:"High-Efficiency Synchronous DC-DC Buck Converter",c:"linear-gradient(90deg,#00f5ff,#00ffa3)",d:"Modeled and designed a 12V-to-5V synchronous buck converter in LTspice and MATLAB/Simulink, validating subsystem performance against automotive power specifications.",h:null,i:["Operated oscilloscopes, multimeters and electronic loads for precise measurement","Measured voltage regulation, ripple, efficiency under dynamic load conditions","Built prototype PCB assemblies and performed pin-to-pin verification"],g:["LTspice","MATLAB","Power Electronics","PCB"]},
-  {t:"Hardware Logic-Based Color Detection & Sorting System",c:"linear-gradient(90deg,#a855f7,#ec4899)",d:"Designed and built a low-voltage electrical sensing subsystem using analog signal conditioning and comparator-based decision circuits — entirely without a microcontroller.",h:null,i:["Built custom harnesses and performed insulation resistance checks","Optimized signal conditioning for noise-robust, repeatable detection","Systematic prototyping with full test data documentation"],g:["Analog Design","Comparators","Signal Conditioning","PCB"]},
-  {t:"Quarter Car Suspension Control Analysis",c:"linear-gradient(90deg,#f59e0b,#f97316)",d:"Modeled and analyzed passive vs Skyhook semi-active suspension using time- and frequency-domain methods in MATLAB & Simulink.",h:"9% reduction in RMS body acceleration achieved",i:["Bode plot and stability margin analysis across frequency range","Improved phase and gain margins significantly over passive baseline"],g:["MATLAB","Simulink","Control Theory","Bode Analysis"]},
-  {t:"Automotive ECU & Power Monitoring System using STM32",c:"linear-gradient(90deg,#f97316,#ef4444)",d:"Prototyped a real-time, safety-critical embedded system on STM32F401RE for speed, collision, and basic battery monitoring.",h:null,i:["Integrated sensor interface circuits following detailed schematics","Analyzed transient signal behavior under electrical noise conditions","Troubleshot and documented wiring inconsistencies with full reports"],g:["STM32","Embedded C","CAN","Sensor Fusion"]},
-  {t:"FPGA-Based Digital Speedometer with Hall Sensor Interface",c:"linear-gradient(90deg,#00ffa3,#00f5ff)",d:"Engineered a real-time sensing system by interfacing Hall Effect sensors using Verilog on FPGA — with aggressive RTL optimization.",h:"34% LUT · 50% Register · 63% I/O reduction",i:["Optimized RTL architecture for maximum resource efficiency","Precise frequency-to-digital conversion with validated timing","Validated complete system against timing specifications"],g:["Verilog","Xilinx Vivado","RTL","Hall Sensor"]},
-  {t:"Sentinel-X Multi-Modal Embedded Access Control System",c:"linear-gradient(90deg,#38bdf8,#818cf8)",d:"Constructed a deterministic security hardware prototype using Raspberry Pi Pico with focus on reliable electrical connections and multi-modal authentication.",h:null,i:["Detailed wiring practices and custom harness fabrication","Troubleshot hardware-level communication issues systematically","Utilized lab test equipment for complete system validation"],g:["Raspberry Pi Pico","MicroPython","I2C","SPI"]}
-];
-
-/* ── WAVE NAME ── */
-const hn=document.getElementById('hname');
-[...'EZHIL     KIRTHIK M.'].forEach(c=>{
-  if(c===' '){hn.innerHTML+='<span style="display:inline-block;width:.35em">&nbsp;</span>';return;}
-  const s=document.createElement('span');s.className='wc';s.textContent=c;hn.appendChild(s);
-});
-/* ── SKILL PILL POP ── */
-const EMO=['⚡','🔌','💡','🔧','🛠️','🚀','🎯','✨','🔥','💥','🏆','🤖','📡','⚙️'];
-document.querySelectorAll('.spill').forEach(p=>{
-  p.addEventListener('click',()=>{
-    p.classList.remove('popped');void p.offsetWidth;p.classList.add('popped');
-    const e=document.createElement('span');
-    e.textContent=EMO[~~(Math.random()*EMO.length)];
-    const r=p.getBoundingClientRect();
-    Object.assign(e.style,{position:'fixed',fontSize:'1.3rem',left:(r.left+r.width/2-10)+'px',top:(r.top-5)+'px',pointerEvents:'none',zIndex:'9999',animation:'pfloat .9s forwards'});
-    document.body.appendChild(e);setTimeout(()=>e.remove(),950);
-  });
-});
-const ps=document.createElement('style');
-ps.textContent='@keyframes pfloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-50px) scale(1.6);opacity:0}}';
-document.head.appendChild(ps);
-
-/* ── MODAL ── */
-function openM(i){
-  const p=PD[i];document.getElementById('macc').style.background=p.c;
-  document.getElementById('mini').innerHTML=`<h3 class="mtitle">${p.t}</h3><p class="mdesc">${p.d}</p>${p.h?`<div class="mhl">${p.h}</div>`:''}<div class="mlist">${p.i.map(x=>`<div class="mli"><div class="mlid"></div><div>${x}</div></div>`).join('')}</div><div class="etags" style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem">${p.g.map(t=>`<span class="etag">${t}</span>`).join('')}</div><div class="macts"><button onclick="closeM()" class="bs" style="flex:1;justify-content:center">CLOSE</button><a href="https://github.com/Ezhilkirthik" target="_blank" class="bp" style="flex:1;justify-content:center"><span>VIEW ON GITHUB</span><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>`;
-  document.getElementById('mov').classList.add('open');document.body.style.overflow='hidden';
-}
-function closeM(e){if(e&&e.target!==document.getElementById('mov')&&!e.target.closest('button'))return;document.getElementById('mov').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
-
-/* ── CURSOR ── */
-const cdd=document.getElementById('cd'),crr=document.getElementById('cr'),cll=document.getElementById('cl');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdd.style.left=mx+'px';cdd.style.top=my+'px';cll.style.left=mx+'px';cll.style.top=my+'px';});
-(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;crr.style.left=rx+'px';crr.style.top=ry+'px';requestAnimationFrame(anim);})();
-document.querySelectorAll('a,button,.pcard,.fcard,.achcard,.scard,.spill,.fbadge').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
-});
-document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
-document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
-document.querySelectorAll('a[href^="http"],a[href^="mailto"]').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cll.style.opacity='1';cll.textContent=el.href.includes('github')?'⚡ GitHub':el.href.includes('linkedin')?'💼 LinkedIn':el.href.includes('mailto')?'✉ Email':'↗';});
-  el.addEventListener('mouseleave',()=>{cll.style.opacity='0';});
-});
-
-/* ── SCROLL ── */
-window.addEventListener('scroll',()=>{
-  const p=scrollY/(document.documentElement.scrollHeight-innerHeight);
-  document.getElementById('sp').style.width=(p*100)+'%';
-  document.getElementById('nav').classList.toggle('scrolled',scrollY>50);
-  let cur='';
-  ['about','experience','projects','skills','publication','achievements','contact'].forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-200)cur=id;});
-  document.querySelectorAll('.nlink').forEach(l=>l.classList.toggle('active',l.getAttribute('href')===`#${cur}`));
-});
-
-/* ── REVEAL ── */
-const rvObs=new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.08});
-document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
-
-/* ── SKILL BARS ── */
-new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.bfill').forEach(b=>b.style.width=b.dataset.p+'%');}),{threshold:.3}).observe(document.getElementById('bg'));
-
-/* ── 3D TILT ── */
-document.querySelectorAll('.pcard').forEach(c=>{
-  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(600px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-10px) scale(1.02)`;c.style.boxShadow=`${-x*20}px ${-y*20}px 60px rgba(0,0,0,.5)`;});
-  c.addEventListener('mouseleave',()=>{c.style.transform='';c.style.boxShadow='';});
-});
-const te=document.getElementById('tilt');
-if(te){te.addEventListener('mousemove',e=>{const r=te.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;te.style.transform=`perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;});te.addEventListener('mouseleave',()=>te.style.transform='');}
-
-/* ── MAGNETIC ── */
-document.querySelectorAll('.mag').forEach(b=>{
-  b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),dx=(e.clientX-r.left-r.width/2)*.35,dy=(e.clientY-r.top-r.height/2)*.35;b.style.transform=`translate(${dx}px,${dy}px)`;});
-  b.addEventListener('mouseleave',()=>b.style.transform='');
-});
-
-/* ── TYPING ── */
-const ROLES=["Electronics Engineer","FPGA Developer","Embedded Systems Engineer","Power Electronics Specialist","RTL Design Intern","Circuit Wizard ⚡"];
-let ri=0,ci=0,dl=false;const te2=document.getElementById('ttext');
-function type(){const c=ROLES[ri];te2.textContent=dl?c.substring(0,ci-1):c.substring(0,ci+1);if(dl)ci--;else ci++;let sp=dl?28:65;if(!dl&&ci===c.length){sp=1800;dl=true;}else if(dl&&ci===0){dl=false;ri=(ri+1)%ROLES.length;sp=350;}setTimeout(type,sp);}
-setTimeout(type,1500);
-
-/* ── SMOOTH SCROLL ── */
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;e.preventDefault();scrollTo({top:t.offsetTop-80,behavior:'smooth'});});});
-
-/* ── LOADER ── */
-const LM=['INITIALIZING...','CLOCKING FPGA...','CHARGING CAPS...','COMPILING RTL...','READY ✓'];
-let lmi=0;const lt=document.getElementById('ltxt');
-const li=setInterval(()=>{if(++lmi<LM.length)lt.textContent=LM[lmi];},240);
-window.addEventListener('load',()=>{clearInterval(li);lt.textContent='READY ✓';setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1400);});
-
-/* ── SPARKS ── */
-document.addEventListener('click',e=>{
-  for(let i=0;i<8;i++){const s=document.createElement('div'),a=(i/8)*Math.PI*2,d=30+Math.random()*30;s.style.cssText=`position:fixed;width:3px;height:3px;border-radius:50%;background:${Math.random()>.5?'#00f5ff':'#00ffa3'};left:${e.clientX}px;top:${e.clientY}px;pointer-events:none;z-index:9997;box-shadow:0 0 6px currentColor;transition:transform .5s,opacity .5s;`;document.body.appendChild(s);requestAnimationFrame(()=>{s.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;s.style.opacity='0';});setTimeout(()=>s.remove(),550);}
-});
-
-</script>
-</body>
+      <script>
+         /* ── PROJECT DATA ── */
+         const PD=[
+           {t:"High-Efficiency Synchronous DC-DC Buck Converter",c:"linear-gradient(90deg,#00f5ff,#00ffa3)",d:"Modeled and designed a 12V-to-5V synchronous buck converter in LTspice and MATLAB/Simulink, validating subsystem performance against automotive power specifications.",h:null,i:["Operated oscilloscopes, multimeters and electronic loads for precise measurement","Measured voltage regulation, ripple, efficiency under dynamic load conditions","Built prototype PCB assemblies and performed pin-to-pin verification"],g:["LTspice","MATLAB","Power Electronics","PCB"]},
+           {t:"Hardware Logic-Based Color Detection & Sorting System",c:"linear-gradient(90deg,#a855f7,#ec4899)",d:"Designed and built a low-voltage electrical sensing subsystem using analog signal conditioning and comparator-based decision circuits — entirely without a microcontroller.",h:null,i:["Built custom harnesses and performed insulation resistance checks","Optimized signal conditioning for noise-robust, repeatable detection","Systematic prototyping with full test data documentation"],g:["Analog Design","Comparators","Signal Conditioning","PCB"]},
+           {t:"Quarter Car Suspension Control Analysis",c:"linear-gradient(90deg,#f59e0b,#f97316)",d:"Modeled and analyzed passive vs Skyhook semi-active suspension using time- and frequency-domain methods in MATLAB & Simulink.",h:"9% reduction in RMS body acceleration achieved",i:["Bode plot and stability margin analysis across frequency range","Improved phase and gain margins significantly over passive baseline"],g:["MATLAB","Simulink","Control Theory","Bode Analysis"]},
+           {t:"Automotive ECU & Power Monitoring System using STM32",c:"linear-gradient(90deg,#f97316,#ef4444)",d:"Prototyped a real-time, safety-critical embedded system on STM32F401RE for speed, collision, and basic battery monitoring.",h:null,i:["Integrated sensor interface circuits following detailed schematics","Analyzed transient signal behavior under electrical noise conditions","Troubleshot and documented wiring inconsistencies with full reports"],g:["STM32","Embedded C","CAN","Sensor Fusion"]},
+           {t:"FPGA-Based Digital Speedometer with Hall Sensor Interface",c:"linear-gradient(90deg,#00ffa3,#00f5ff)",d:"Engineered a real-time sensing system by interfacing Hall Effect sensors using Verilog on FPGA — with aggressive RTL optimization.",h:"34% LUT · 50% Register · 63% I/O reduction",i:["Optimized RTL architecture for maximum resource efficiency","Precise frequency-to-digital conversion with validated timing","Validated complete system against timing specifications"],g:["Verilog","Xilinx Vivado","RTL","Hall Sensor"]},
+           {t:"Sentinel-X Multi-Modal Embedded Access Control System",c:"linear-gradient(90deg,#38bdf8,#818cf8)",d:"Constructed a deterministic security hardware prototype using Raspberry Pi Pico with focus on reliable electrical connections and multi-modal authentication.",h:null,i:["Detailed wiring practices and custom harness fabrication","Troubleshot hardware-level communication issues systematically","Utilized lab test equipment for complete system validation"],g:["Raspberry Pi Pico","MicroPython","I2C","SPI"]}
+         ];
+         
+         /* ── WAVE NAME ── */
+         const hn=document.getElementById('hname');
+         [...'EZHIL     KIRTHIK M.'].forEach(c=>{
+           if(c===' '){hn.innerHTML+='<span style="display:inline-block;width:.35em">&nbsp;</span>';return;}
+           const s=document.createElement('span');s.className='wc';s.textContent=c;hn.appendChild(s);
+         });
+         /* ── SKILL PILL POP ── */
+         const EMO=['⚡','🔌','💡','🔧','🛠️','🚀','🎯','✨','🔥','💥','🏆','🤖','📡','⚙️'];
+         document.querySelectorAll('.spill').forEach(p=>{
+           p.addEventListener('click',()=>{
+             p.classList.remove('popped');void p.offsetWidth;p.classList.add('popped');
+             const e=document.createElement('span');
+             e.textContent=EMO[~~(Math.random()*EMO.length)];
+             const r=p.getBoundingClientRect();
+             Object.assign(e.style,{position:'fixed',fontSize:'1.3rem',left:(r.left+r.width/2-10)+'px',top:(r.top-5)+'px',pointerEvents:'none',zIndex:'9999',animation:'pfloat .9s forwards'});
+             document.body.appendChild(e);setTimeout(()=>e.remove(),950);
+           });
+         });
+         const ps=document.createElement('style');
+         ps.textContent='@keyframes pfloat{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-50px) scale(1.6);opacity:0}}';
+         document.head.appendChild(ps);
+         
+         /* ── MODAL ── */
+         function openM(i){
+           const p=PD[i];document.getElementById('macc').style.background=p.c;
+           document.getElementById('mini').innerHTML=`<h3 class="mtitle">${p.t}</h3><p class="mdesc">${p.d}</p>${p.h?`<div class="mhl">${p.h}</div>`:''}<div class="mlist">${p.i.map(x=>`<div class="mli"><div class="mlid"></div><div>${x}</div></div>`).join('')}</div><div class="etags" style="display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2rem">${p.g.map(t=>`<span class="etag">${t}</span>`).join('')}</div><div class="macts"><button onclick="closeM()" class="bs" style="flex:1;justify-content:center">CLOSE</button><a href="https://github.com/Ezhilkirthik" target="_blank" class="bp" style="flex:1;justify-content:center"><span>VIEW ON GITHUB</span><i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>`;
+           document.getElementById('mov').classList.add('open');document.body.style.overflow='hidden';
+         }
+         function closeM(e){if(e&&e.target!==document.getElementById('mov')&&!e.target.closest('button'))return;document.getElementById('mov').classList.remove('open');document.body.style.overflow='';}
+         document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+         
+         /* ── CURSOR ── */
+         const cdd=document.getElementById('cd'),crr=document.getElementById('cr'),cll=document.getElementById('cl');
+         let mx=0,my=0,rx=0,ry=0;
+         document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdd.style.left=mx+'px';cdd.style.top=my+'px';cll.style.left=mx+'px';cll.style.top=my+'px';});
+         (function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;crr.style.left=rx+'px';crr.style.top=ry+'px';requestAnimationFrame(anim);})();
+         document.querySelectorAll('a,button,.pcard,.fcard,.achcard,.scard,.spill,.fbadge').forEach(el=>{
+           el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
+           el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+         });
+         document.addEventListener('mousedown',()=>document.body.classList.add('cc'));
+         document.addEventListener('mouseup',()=>document.body.classList.remove('cc'));
+         document.querySelectorAll('a[href^="http"],a[href^="mailto"]').forEach(el=>{
+           el.addEventListener('mouseenter',()=>{cll.style.opacity='1';cll.textContent=el.href.includes('github')?'⚡ GitHub':el.href.includes('linkedin')?'💼 LinkedIn':el.href.includes('mailto')?'✉ Email':'↗';});
+           el.addEventListener('mouseleave',()=>{cll.style.opacity='0';});
+         });
+         
+         /* ── SCROLL ── */
+         window.addEventListener('scroll',()=>{
+           const p=scrollY/(document.documentElement.scrollHeight-innerHeight);
+           document.getElementById('sp').style.width=(p*100)+'%';
+           document.getElementById('nav').classList.toggle('scrolled',scrollY>50);
+           let cur='';
+           ['about','experience','projects','skills','publication','achievements','contact'].forEach(id=>{const el=document.getElementById(id);if(el&&scrollY>=el.offsetTop-200)cur=id;});
+           document.querySelectorAll('.nlink').forEach(l=>l.classList.toggle('active',l.getAttribute('href')===`#${cur}`));
+         });
+         
+         /* ── REVEAL ── */
+         const rvObs=new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.08});
+         document.querySelectorAll('.rv').forEach(el=>rvObs.observe(el));
+         
+         /* ── SKILL BARS ── */
+         new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.bfill').forEach(b=>b.style.width=b.dataset.p+'%');}),{threshold:.3}).observe(document.getElementById('bg'));
+         
+         /* ── 3D TILT ── */
+         document.querySelectorAll('.pcard').forEach(c=>{
+           c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(600px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateY(-10px) scale(1.02)`;c.style.boxShadow=`${-x*20}px ${-y*20}px 60px rgba(0,0,0,.5)`;});
+           c.addEventListener('mouseleave',()=>{c.style.transform='';c.style.boxShadow='';});
+         });
+         const te=document.getElementById('tilt');
+         if(te){te.addEventListener('mousemove',e=>{const r=te.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;te.style.transform=`perspective(800px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;});te.addEventListener('mouseleave',()=>te.style.transform='');}
+         
+         /* ── MAGNETIC ── */
+         document.querySelectorAll('.mag').forEach(b=>{
+           b.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),dx=(e.clientX-r.left-r.width/2)*.35,dy=(e.clientY-r.top-r.height/2)*.35;b.style.transform=`translate(${dx}px,${dy}px)`;});
+           b.addEventListener('mouseleave',()=>b.style.transform='');
+         });
+         
+         /* ── TYPING ── */
+         const ROLES=[
+           "Electronics Enthusiast",
+           "FPGA & RTL Learner",
+           "Embedded Systems Explorer",
+           "Power Electronics Aspirant",
+           "Circuit Builder"
+         ];
+         let ri=0,ci=0,dl=false;const te2=document.getElementById('ttext');
+         function type(){const c=ROLES[ri];te2.textContent=dl?c.substring(0,ci-1):c.substring(0,ci+1);if(dl)ci--;else ci++;let sp=dl?28:65;if(!dl&&ci===c.length){sp=1800;dl=true;}else if(dl&&ci===0){dl=false;ri=(ri+1)%ROLES.length;sp=350;}setTimeout(type,sp);}
+         setTimeout(type,1500);
+         
+         /* ── SMOOTH SCROLL ── */
+         document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;e.preventDefault();scrollTo({top:t.offsetTop-80,behavior:'smooth'});});});
+         
+         /* ── LOADER ── */
+         const LM=['INITIALIZING...','CLOCKING FPGA...','CHARGING CAPS...','COMPILING RTL...','READY ✓'];
+         let lmi=0;const lt=document.getElementById('ltxt');
+         const li=setInterval(()=>{if(++lmi<LM.length)lt.textContent=LM[lmi];},240);
+         window.addEventListener('load',()=>{clearInterval(li);lt.textContent='READY ✓';setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1400);});
+         
+         /* ── SPARKS ── */
+         document.addEventListener('click',e=>{
+           for(let i=0;i<8;i++){const s=document.createElement('div'),a=(i/8)*Math.PI*2,d=30+Math.random()*30;s.style.cssText=`position:fixed;width:3px;height:3px;border-radius:50%;background:${Math.random()>.5?'#00f5ff':'#00ffa3'};left:${e.clientX}px;top:${e.clientY}px;pointer-events:none;z-index:9997;box-shadow:0 0 6px currentColor;transition:transform .5s,opacity .5s;`;document.body.appendChild(s);requestAnimationFrame(()=>{s.style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;s.style.opacity='0';});setTimeout(()=>s.remove(),550);}
+         });
+         
+      </script>
+   </body>
 </html>
